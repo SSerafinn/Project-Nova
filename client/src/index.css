@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Custom Properties ───────────────────────────────────────────────── */
+:root {
+  --color-primary: #58cc02;
+  --color-primary-dark: #46a302;
+  --color-primary-light: #d7ffb8;
+  --color-secondary: #1cb0f6;
+  --color-secondary-dark: #049be5;
+  --color-secondary-light: #ddf4ff;
+  --color-accent: #ff9600;
+  --color-accent-dark: #e08600;
+  --color-accent-light: #fff0cc;
+  --color-danger: #ff4b4b;
+  --color-danger-dark: #ea2b2b;
+  --color-danger-light: #ffdddd;
+  --color-surface: #ffffff;
+  --color-bg: #f7f7f7;
+  --color-text: #3c3c3c;
+  --color-muted: #afafaf;
+  --color-border: #e5e5e5;
+}
+
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Nunito', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Chunky Button Press Effect ───────────────────────────────────────────── */
+.btn-chunky {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  border-radius: 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-chunky:not(:disabled):active {
+  transform: translateY(4px);
+  box-shadow: none !important;
+}
+
+.btn-chunky:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ─── 3D Flashcard Flip ─────────────────────────────────────────────────────── */
+.flashcard-container {
+  perspective: 1200px;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flashcard-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.flashcard-back {
+  transform: rotateY(180deg);
+}
+
+/* ─── Progress bar shimmer ──────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-border);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-muted);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}

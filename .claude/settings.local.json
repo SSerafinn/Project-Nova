@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/ADMIN/Desktop/Projects/**)",
+      "Read(//c/Users/ADMIN/Desktop/**)",
+      "Bash(npm install *)",
+      "Bash(npm view *)",
+      "Bash(timeout 5 node index.js)",
+      "Bash(npx vite *)"
+    ]
+  }
+}
