@@ -6,9 +6,17 @@ const { generateSummary, generateFlashcards, generateQuiz } = require('../servic
 // GET /api/notes — list all sessions
 router.get('/', (req, res) => {
   try {
-    const sessions = db.prepare(
-      'SELECT id, title, source, created_at FROM sessions ORDER BY created_at DESC'
-    ).all();
+    const sessions = db.prepare(`
+      SELECT
+        s.id, s.title, s.source, s.created_at,
+        COUNT(DISTINCT f.id) AS flashcard_count,
+        COUNT(DISTINCT q.id) AS quiz_count
+      FROM sessions s
+      LEFT JOIN flashcards f ON f.session_id = s.id
+      LEFT JOIN quiz_items q ON q.session_id = s.id
+      GROUP BY s.id
+      ORDER BY s.created_at DESC
+    `).all();
     res.json(sessions);
   } catch (err) {
     console.error('GET /notes error:', err);

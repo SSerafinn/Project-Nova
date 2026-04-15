@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import FlashCard from '../components/FlashCard';
 import ProgressBar from '../components/ui/ProgressBar';
 import Button from '../components/ui/Button';
 import { getNoteById } from '../services/api';
+import { LayersIcon, ArrowsRightLeftIcon, CheckIcon } from '../components/Icons';
 
 function fisherYates(arr) {
   const a = [...arr];
@@ -46,7 +47,6 @@ export default function Flashcards() {
   });
 
   function goTo(index) {
-    // Reset flip BEFORE changing index to avoid flicker
     setIsFlipped(false);
     setTimeout(() => setCurrentIndex(index), 0);
   }
@@ -68,7 +68,7 @@ export default function Flashcards() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-        <div className="text-5xl animate-bounce">🃏</div>
+        <LayersIcon className="w-14 h-14 text-primary animate-bounce" />
         <p className="text-muted font-semibold">Loading flashcards...</p>
       </div>
     );
@@ -125,8 +125,9 @@ export default function Flashcards() {
           ← Prev
         </Button>
 
-        <Button variant="ghost" size="sm" onClick={handleShuffle}>
-          🔀 Shuffle
+        <Button variant="ghost" size="sm" onClick={handleShuffle} className="flex items-center gap-1.5">
+          <ArrowsRightLeftIcon className="w-4 h-4" />
+          Shuffle
         </Button>
 
         <Button
@@ -146,9 +147,10 @@ export default function Flashcards() {
             variant="primary"
             size="lg"
             onClick={() => navigate(`/notes/${id}/summary`)}
-            className="mx-auto"
+            className="mx-auto flex items-center gap-2"
           >
-            ✅ Done — Back to Summary
+            <CheckIcon className="w-5 h-5" />
+            Done — Back to Summary
           </Button>
         </div>
       )}

@@ -4,6 +4,7 @@ import QuizQuestion from '../components/QuizQuestion';
 import ProgressBar from '../components/ui/ProgressBar';
 import Button from '../components/ui/Button';
 import { getNoteById } from '../services/api';
+import { QuestionMarkCircleIcon, TrophyIcon, StarIcon } from '../components/Icons';
 
 function fisherYates(arr) {
   const a = [...arr];
@@ -24,9 +25,13 @@ function getStars(score, total) {
 
 function Stars({ count }) {
   return (
-    <div className="flex gap-1 justify-center text-4xl">
+    <div className="flex gap-2 justify-center">
       {[1, 2, 3].map((n) => (
-        <span key={n} className={n <= count ? '' : 'opacity-20'}>⭐</span>
+        <StarIcon
+          key={n}
+          className={`w-10 h-10 ${n <= count ? 'text-primary' : 'text-border'}`}
+          filled={n <= count}
+        />
       ))}
     </div>
   );
@@ -78,7 +83,7 @@ export default function Quiz() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-        <div className="text-5xl animate-bounce">🎯</div>
+        <QuestionMarkCircleIcon className="w-14 h-14 text-primary animate-bounce" />
         <p className="text-muted font-semibold">Loading quiz...</p>
       </div>
     );
@@ -102,7 +107,9 @@ export default function Quiz() {
 
     return (
       <div className="max-w-lg mx-auto px-4 py-10 flex flex-col items-center gap-6 text-center">
-        <div className="text-7xl animate-bounceIn">🏆</div>
+        <div className="text-primary animate-bounceIn">
+          <TrophyIcon className="w-20 h-20 mx-auto" />
+        </div>
         <h1 className="text-3xl font-black text-[#3C3C3C]">Quiz Complete!</h1>
         <Stars count={stars} />
 
@@ -113,12 +120,12 @@ export default function Quiz() {
           </p>
           <p className="mt-3 font-semibold text-[#3C3C3C]">
             {stars === 3
-              ? '🎉 Excellent work! You really know this material!'
+              ? 'Excellent work! You really know this material!'
               : stars === 2
-              ? '👍 Good job! A bit more practice and you\'ll nail it!'
+              ? "Good job! A bit more practice and you'll nail it!"
               : stars === 1
-              ? '📚 Keep studying — you\'re getting there!'
-              : '💪 Don\'t give up! Review your notes and try again.'}
+              ? "Keep studying — you're getting there!"
+              : "Don't give up! Review your notes and try again."}
           </p>
         </div>
 
@@ -129,7 +136,7 @@ export default function Quiz() {
             onClick={handleRetry}
             className="flex-1"
           >
-            🔁 Try Again
+            Try Again
           </Button>
           <Button
             variant="ghost"
@@ -137,7 +144,7 @@ export default function Quiz() {
             onClick={() => navigate(`/notes/${id}/summary`)}
             className="flex-1"
           >
-            🏠 Back to Notes
+            Back to Notes
           </Button>
         </div>
       </div>

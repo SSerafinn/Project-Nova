@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NoteCard from '../components/NoteCard';
 import { getNotes } from '../services/api';
+import { BookOpenIcon, SpinnerIcon, PlusIcon } from '../components/Icons';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export default function Home() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-black text-[#3C3C3C]">My Notes 📚</h1>
+          <h1 className="text-3xl font-black text-[#3C3C3C]">My Notes</h1>
           <p className="text-muted mt-1">
             {sessions.length > 0
               ? `${sessions.length} note${sessions.length !== 1 ? 's' : ''} ready to study`
@@ -37,7 +38,7 @@ export default function Home() {
       {/* Loading */}
       {loading && (
         <div className="flex flex-col items-center justify-center py-24 gap-4">
-          <div className="text-5xl animate-pulse"></div>
+          <SpinnerIcon className="w-10 h-10 text-primary animate-spin" />
           <p className="text-muted font-semibold">Loading your notes...</p>
         </div>
       )}
@@ -52,17 +53,19 @@ export default function Home() {
       {/* Empty state */}
       {!loading && !error && sessions.length === 0 && (
         <div className="flex flex-col items-center justify-center py-24 gap-5 text-center">
-          <span className="text-7xl">😭</span>
-          <h2 className="text-2xl font-extrabold text-[#3C3C3C]">No notes yet!</h2>
+          <div className="w-20 h-20 rounded-full bg-primary-light flex items-center justify-center">
+            <BookOpenIcon className="w-10 h-10 text-primary" />
+          </div>
+          <h2 className="text-2xl font-extrabold text-[#3C3C3C]">No notes yet</h2>
           <p className="text-muted max-w-sm">
             Upload your study notes and let AI do the heavy lifting — summaries, flashcards, and quizzes in seconds.
           </p>
           <button
             onClick={() => navigate('/upload')}
             className="btn-chunky bg-primary text-white px-8 py-3.5 rounded-2xl font-extrabold text-base mt-2 hover:bg-primary-dark transition-colors"
-            style={{ boxShadow: '0px 4px 0px #46A302' }}
+            style={{ boxShadow: '0px 4px 0px #B08010' }}
           >
-            Upload Your First Note 🚀
+            Upload Your First Note
           </button>
         </div>
       )}
@@ -84,11 +87,11 @@ export default function Home() {
       {/* Floating Action Button */}
       <button
         onClick={() => navigate('/upload')}
-        className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-primary text-white text-3xl font-black flex items-center justify-center hover:bg-primary-dark transition-all hover:scale-110 active:scale-95 z-40"
-        style={{ boxShadow: '0px 6px 0px #46A302' }}
+        className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-primary text-white font-black flex items-center justify-center hover:bg-primary-dark transition-all hover:scale-110 active:scale-95 z-40"
+        style={{ boxShadow: '0px 6px 0px #B08010' }}
         title="Upload new note"
       >
-        +
+        <PlusIcon className="w-7 h-7" />
       </button>
     </div>
   );

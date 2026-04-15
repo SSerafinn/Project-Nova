@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
+import { CheckIcon, XMarkIcon } from './Icons';
 
 function getChoiceStyle(choice, selected, correct, revealed) {
   if (!revealed) {
@@ -33,7 +34,7 @@ export default function QuizQuestion({ question, choices, correctAnswer, onAnswe
         spread: 80,
         angle: 90,
         origin: { y: 0.55 },
-        colors: ['#58CC02', '#1CB0F6', '#FF9600', '#FF4B4B'],
+        colors: ['#D4A017', '#C86A14', '#B08010', '#FEF9E7'],
       });
     }
 
@@ -77,9 +78,13 @@ export default function QuizQuestion({ question, choices, correctAnswer, onAnswe
             }
           `}
         >
-          {selected === correctAnswer
-            ? '🎉 Correct! Great job!'
-            : `❌ Not quite! The answer was: "${correctAnswer}"`}
+          <span className="flex items-center gap-2">
+            {selected === correctAnswer ? (
+              <><CheckIcon className="w-4 h-4 shrink-0" /> Correct! Great job!</>
+            ) : (
+              <><XMarkIcon className="w-4 h-4 shrink-0" /> Not quite! The answer was: &ldquo;{correctAnswer}&rdquo;</>
+            )}
+          </span>
         </div>
       )}
 
@@ -88,7 +93,7 @@ export default function QuizQuestion({ question, choices, correctAnswer, onAnswe
         <button
           onClick={handleCheck}
           className="btn-chunky w-full bg-primary text-white py-3.5 rounded-2xl font-extrabold text-base transition-colors hover:bg-primary-dark animate-bounceIn"
-          style={{ boxShadow: '0px 4px 0px #46A302' }}
+          style={{ boxShadow: '0px 4px 0px #B08010' }}
         >
           Check Answer
         </button>

@@ -4,23 +4,23 @@
 
 /* ─── CSS Custom Properties ───────────────────────────────────────────────── */
 :root {
-  --color-primary: #58cc02;
-  --color-primary-dark: #46a302;
-  --color-primary-light: #d7ffb8;
-  --color-secondary: #1cb0f6;
-  --color-secondary-dark: #049be5;
-  --color-secondary-light: #ddf4ff;
-  --color-accent: #ff9600;
-  --color-accent-dark: #e08600;
-  --color-accent-light: #fff0cc;
+  --color-primary: #d4a017;
+  --color-primary-dark: #b08010;
+  --color-primary-light: #fef9e7;
+  --color-secondary: #78716c;
+  --color-secondary-dark: #57534e;
+  --color-secondary-light: #f5f0e8;
+  --color-accent: #c86a14;
+  --color-accent-dark: #a85510;
+  --color-accent-light: #fdecd0;
   --color-danger: #ff4b4b;
   --color-danger-dark: #ea2b2b;
   --color-danger-light: #ffdddd;
   --color-surface: #ffffff;
-  --color-bg: #f7f7f7;
+  --color-bg: #fffbf0;
   --color-text: #3c3c3c;
-  --color-muted: #afafaf;
-  --color-border: #e5e5e5;
+  --color-muted: #a09060;
+  --color-border: #e8ddb0;
 }
 
 /* ─── Base ─────────────────────────────────────────────────────────────────── */

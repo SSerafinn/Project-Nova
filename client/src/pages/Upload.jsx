@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import UploadZone from '../components/UploadZone';
 import Button from '../components/ui/Button';
 import { uploadFile, saveNote } from '../services/api';
+import { AcademicCapIcon, DocumentTextIcon, UploadIcon } from '../components/Icons';
 
 const LOADING_MESSAGES = [
-  'Reading your notes... 📖',
-  'Finding key concepts... 🧩',
-  'Building your flashcards... 🃏',
-  'Creating quiz questions... 🎯',
-  'Almost ready! ✨',
+  'Reading your notes...',
+  'Finding key concepts...',
+  'Building your flashcards...',
+  'Creating quiz questions...',
+  'Almost ready!',
 ];
 
 export default function Upload() {
@@ -93,7 +94,9 @@ export default function Upload() {
   if (status === 'generating') {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-6 px-4">
-        <div className="text-7xl animate-bounce">🧠</div>
+        <div className="w-20 h-20 rounded-full bg-primary-light flex items-center justify-center animate-bounce">
+          <AcademicCapIcon className="w-10 h-10 text-primary" />
+        </div>
         <h2 className="text-2xl font-extrabold text-[#3C3C3C] text-center">
           Generating your reviewer...
         </h2>
@@ -120,7 +123,7 @@ export default function Upload() {
         >
           ← Back to Notes
         </button>
-        <h1 className="text-3xl font-black text-[#3C3C3C]">Upload Notes 📤</h1>
+        <h1 className="text-3xl font-black text-[#3C3C3C]">Upload Notes</h1>
         <p className="text-muted mt-1">Add your study material and we'll create a full reviewer for you.</p>
       </div>
 
@@ -142,19 +145,20 @@ export default function Upload() {
         {/* Tabs */}
         <div className="flex gap-2 bg-border rounded-2xl p-1">
           {[
-            { id: 'pdf', label: '📄 Upload PDF' },
-            { id: 'text', label: '✏️ Paste Text' },
+            { id: 'pdf', label: 'Upload PDF', Icon: UploadIcon },
+            { id: 'text', label: 'Paste Text', Icon: DocumentTextIcon },
           ].map((t) => (
             <button
               key={t.id}
               type="button"
               onClick={() => setTab(t.id)}
-              className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all ${
                 tab === t.id
                   ? 'bg-surface shadow-card text-[#3C3C3C]'
                   : 'text-muted hover:text-[#3C3C3C]'
               }`}
             >
+              <t.Icon className="w-4 h-4" />
               {t.label}
             </button>
           ))}
@@ -180,7 +184,7 @@ export default function Upload() {
         {/* Error */}
         {error && (
           <div className="bg-danger-light border border-danger/20 rounded-2xl px-5 py-3 text-danger-dark font-semibold text-sm">
-            ⚠️ {error}
+            {error}
           </div>
         )}
 
@@ -191,7 +195,7 @@ export default function Upload() {
           size="lg"
           className="w-full"
         >
-          Generate My Reviewer 🚀
+          Generate My Reviewer
         </Button>
       </form>
     </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
+import { XCircleIcon, CheckCircleIcon, CloudArrowUpIcon, DocumentTextIcon } from './Icons';
 
 export default function UploadZone({ onFileAccepted }) {
   const { getRootProps, getInputProps, isDragActive, isDragReject, acceptedFiles } = useDropzone({
@@ -27,23 +28,23 @@ export default function UploadZone({ onFileAccepted }) {
       <div className="flex flex-col items-center gap-3">
         {isDragReject ? (
           <>
-            <span className="text-4xl">❌</span>
+            <XCircleIcon className="w-10 h-10 text-danger" />
             <p className="font-bold text-danger">Only PDF files are supported!</p>
           </>
         ) : fileName ? (
           <>
-            <span className="text-4xl">✅</span>
+            <CheckCircleIcon className="w-10 h-10 text-primary" />
             <p className="font-bold text-primary">{fileName}</p>
             <p className="text-sm text-muted">Click or drop to replace</p>
           </>
         ) : isDragActive ? (
           <>
-            <span className="text-4xl">📂</span>
+            <CloudArrowUpIcon className="w-10 h-10 text-primary" />
             <p className="font-bold text-primary">Drop it here!</p>
           </>
         ) : (
           <>
-            <span className="text-4xl">📄</span>
+            <DocumentTextIcon className="w-10 h-10 text-muted" />
             <p className="font-bold text-[#3C3C3C]">Drop your PDF here</p>
             <p className="text-sm text-muted">or click to browse — max 10 MB</p>
           </>

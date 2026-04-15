@@ -4,8 +4,9 @@ import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 import { getNoteById, regenerateSummary } from '../services/api';
+import { BookOpenIcon, ArrowPathIcon, KeyIcon, ListBulletIcon, CheckIcon } from '../components/Icons';
 
-function Section({ title, children, defaultOpen = true }) {
+function Section({ title, icon: Icon, children, defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <Card className="overflow-hidden">
@@ -13,7 +14,10 @@ function Section({ title, children, defaultOpen = true }) {
         onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center justify-between px-6 py-4 font-extrabold text-[#3C3C3C] hover:bg-gray-50 transition-colors"
       >
-        <span>{title}</span>
+        <span className="flex items-center gap-2">
+          {Icon && <Icon className="w-4 h-4 text-primary" />}
+          {title}
+        </span>
         <span className="text-muted text-lg">{open ? '▲' : '▼'}</span>
       </button>
       {open && <div className="px-6 pb-6">{children}</div>}
@@ -61,7 +65,7 @@ export default function Summary() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-        <div className="text-5xl animate-bounce">📋</div>
+        <BookOpenIcon className="w-14 h-14 text-primary animate-bounce" />
         <p className="text-muted font-semibold">Loading summary...</p>
       </div>
     );
@@ -97,9 +101,10 @@ export default function Summary() {
             size="sm"
             onClick={handleRegenerate}
             loading={regenerating}
-            className="shrink-0"
+            className="shrink-0 flex items-center gap-1.5"
           >
-            🔄 Regenerate
+            <ArrowPathIcon className="w-4 h-4" />
+            Regenerate
           </Button>
         </div>
       </div>
@@ -111,7 +116,7 @@ export default function Summary() {
       ) : (
         <div className="flex flex-col gap-5">
           {/* Key Concepts */}
-          <Section title="🔑 Key Concepts">
+          <Section title="Key Concepts" icon={KeyIcon}>
             <div className="flex flex-wrap gap-2 mt-2">
               {(summary.keyConcepts || []).map((concept, i) => (
                 <Badge key={i} label={concept} variant="concept" />
@@ -120,7 +125,7 @@ export default function Summary() {
           </Section>
 
           {/* Important Terms */}
-          <Section title="📖 Important Terms">
+          <Section title="Important Terms" icon={ListBulletIcon}>
             <div className="flex flex-col gap-3 mt-2">
               {(summary.importantTerms || []).map((item, i) => (
                 <div key={i} className="bg-secondary-light rounded-2xl px-4 py-3">
@@ -132,7 +137,7 @@ export default function Summary() {
           </Section>
 
           {/* Key Takeaways */}
-          <Section title="✅ Key Takeaways">
+          <Section title="Key Takeaways" icon={CheckIcon}>
             <ul className="flex flex-col gap-3 mt-2">
               {(summary.keyTakeaways || []).map((takeaway, i) => (
                 <li key={i} className="flex items-start gap-3">
@@ -153,7 +158,7 @@ export default function Summary() {
           onClick={() => navigate(`/notes/${id}/flashcards`)}
           className="flex-1"
         >
-          Study Flashcards 🃏
+          Study Flashcards
         </Button>
         <Button
           variant="primary"
@@ -161,7 +166,7 @@ export default function Summary() {
           onClick={() => navigate(`/notes/${id}/quiz`)}
           className="flex-1"
         >
-          Take Quiz 🎯
+          Take Quiz
         </Button>
       </div>
     </div>
