@@ -37,7 +37,7 @@ export default function Home() {
       {/* Loading */}
       {loading && (
         <div className="flex flex-col items-center justify-center py-24 gap-4">
-          <div className="text-5xl animate-pulse">🧠</div>
+          <div className="text-5xl animate-pulse"></div>
           <p className="text-muted font-semibold">Loading your notes...</p>
         </div>
       )}

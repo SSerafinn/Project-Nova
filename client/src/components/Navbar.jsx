@@ -11,8 +11,8 @@ export default function Navbar() {
       <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 no-underline">
-          <span className="text-2xl">🧠</span>
-          <span className="text-xl font-black text-primary tracking-tight">NoteQuest</span>
+          <span className="text-2xl"></span>
+          <span className="text-xl font-black text-primary tracking-tight">Project Nova</span>
         </Link>
 
         {/* Nav links */}
