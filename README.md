@@ -1,4 +1,4 @@
-# NoteQuest 🧠
+# Nova
 
 AI-powered study tool that turns your notes into summaries, flashcards, and quizzes — Duolingo-style.
 
