@@ -5,18 +5,18 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#F5C518',
-          dark: '#D4A800',
-          light: '#FFF9E6',
+          DEFAULT: '#E9B949',
+          dark: '#C99A32',
+          light: '#FFF3CC',
         },
         secondary: {
-          DEFAULT: '#6B5CF0',
+          DEFAULT: '#7B6CF5',
           dark: '#5448D0',
           light: '#2D2560',
         },
         accent: {
-          DEFAULT: '#C86A14',
-          dark: '#A85510',
+          DEFAULT: '#E07B30',
+          dark: '#B85F18',
           light: '#3A2010',
         },
         danger: {
@@ -24,14 +24,14 @@ export default {
           dark: '#EA2B2B',
           light: '#3D1010',
         },
-        surface: '#251E42',
-        bg: '#1C1733',
-        muted: '#9896BB',
-        border: '#4A3FC0',
+        surface: '#131027',
+        bg: '#0C0B1C',
+        muted: '#7E7CA0',
+        border: '#2E2A55',
       },
       fontFamily: {
-        sans: ['Nunito', 'sans-serif'],
-        body: ['Nunito Sans', 'sans-serif'],
+        sans: ['Space Grotesk', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
       },
       borderRadius: {
         '2xl': '1rem',
@@ -39,10 +39,12 @@ export default {
         '4xl': '2rem',
       },
       boxShadow: {
-        card: '0px 4px 0px #13102B',
-        'card-primary': '0px 4px 0px #D4A800',
+        card: '0px 4px 0px #08070F',
+        'card-primary': '0px 4px 0px #C99A32',
         'card-secondary': '0px 4px 0px #5448D0',
         'card-danger': '0px 4px 0px #EA2B2B',
+        'glow-primary': '0 0 20px rgba(233,185,73,0.35)',
+        'glow-secondary': '0 0 20px rgba(123,108,245,0.35)',
       },
       keyframes: {
         fadeInUp: {
@@ -65,14 +67,20 @@ export default {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.5' },
         },
+        novaPulse: {
+          '0%, 100%': { boxShadow: '0 0 28px rgba(233,185,73,0.45), 0 0 60px rgba(233,185,73,0.12)' },
+          '50%': { boxShadow: '0 0 42px rgba(233,185,73,0.70), 0 0 90px rgba(233,185,73,0.22)' },
+        },
       },
       animation: {
         fadeInUp: 'fadeInUp 0.4s ease-out forwards',
         shake: 'shake 0.4s ease-in-out',
         bounceIn: 'bounceIn 0.5s ease-out forwards',
         pulse: 'pulse 1.5s ease-in-out infinite',
+        novaPulse: 'novaPulse 2.8s ease-in-out infinite',
       },
     },
   },
   plugins: [],
 };
+

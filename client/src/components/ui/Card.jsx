@@ -1,12 +1,14 @@
 import React from 'react';
 
-export default function Card({ children, className = '', onClick }) {
+export default function Card({ children, className = '', onClick, style }) {
   return (
     <div
       onClick={onClick}
-      className={`bg-surface rounded-2xl border border-border shadow-card ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      style={style}
+      className={`relative shimmer-top bg-white/[0.04] backdrop-blur-sm rounded-2xl border border-white/[0.08] overflow-hidden ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
       {children}
     </div>
   );
 }
+

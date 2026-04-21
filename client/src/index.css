@@ -4,23 +4,23 @@
 
 /* ─── CSS Custom Properties ───────────────────────────────────────────────── */
 :root {
-  --color-primary: #f5c518;
-  --color-primary-dark: #d4a800;
-  --color-primary-light: #fff9e6;
-  --color-secondary: #6b5cf0;
-  --color-secondary-dark: #5448d0;
-  --color-secondary-light: #2d2560;
-  --color-accent: #c86a14;
-  --color-accent-dark: #a85510;
-  --color-accent-light: #3a2010;
+  --color-primary: #E9B949;
+  --color-primary-dark: #C99A32;
+  --color-primary-light: #FFF3CC;
+  --color-secondary: #7B6CF5;
+  --color-secondary-dark: #5448D0;
+  --color-secondary-light: #2D2560;
+  --color-accent: #E07B30;
+  --color-accent-dark: #B85F18;
+  --color-accent-light: #3A2010;
   --color-danger: #ff4b4b;
   --color-danger-dark: #ea2b2b;
   --color-danger-light: #3d1010;
-  --color-surface: #251e42;
-  --color-bg: #1c1733;
+  --color-surface: #131027;
+  --color-bg: #0C0B1C;
   --color-text: #ffffff;
-  --color-muted: #9896bb;
-  --color-border: #4a3fc0;
+  --color-muted: #7E7CA0;
+  --color-border: #2E2A55;
 }
 
 /* ─── Base ─────────────────────────────────────────────────────────────────── */
@@ -33,18 +33,46 @@ body {
   margin: 0;
   padding: 0;
   color: #ffffff;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #1c1733;
-  /* Layered radial-gradient starfield */
+  background-color: #0C0B1C;
+  /*
+   * Layered background: nebula color washes + three star layers.
+   * Prime-ish background-sizes (397px, 251px, etc.) prevent a visible tiling grid.
+   */
   background-image:
-    radial-gradient(circle, rgba(255,255,255,0.70) 1px, transparent 1px),
-    radial-gradient(circle, rgba(255,255,255,0.45) 1px, transparent 1px),
-    radial-gradient(circle, rgba(255,255,255,0.25) 0.5px, transparent 0.5px);
-  background-size: 160px 120px, 210px 180px, 90px 70px;
-  background-position: 0 0, 80px 60px, 35px 25px;
+    radial-gradient(ellipse 70% 55% at 15% 35%, rgba(107,92,240,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 45% at 85% 70%, rgba(30,80,220,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 60% 8%,  rgba(224,123,48,0.04) 0%, transparent 70%),
+    radial-gradient(circle, rgba(255,255,255,0.80) 1px,   transparent 1px),
+    radial-gradient(circle, rgba(200,210,255,0.45) 1px,   transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,0.22) 0.5px, transparent 0.5px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    397px 457px,
+    251px 313px,
+    89px 103px;
+  background-position:
+    0 0, 0 0, 0 0,
+    37px 23px,
+    113px 71px,
+    7px 13px;
   min-height: 100vh;
+}
+
+/* ─── Glass shimmer line (top-edge highlight on cards / nav) ────────────────── */
+.shimmer-top::before {
+  content: '';
+  position: absolute;
+  inset-x: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 /* ─── Chunky Button Press Effect ───────────────────────────────────────────── */
@@ -92,7 +120,7 @@ body {
   inset: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transform: rotateY(0deg); /* force GPU layer — fixes backface bleed in Chrome/Safari */
+  transform: rotateY(0deg);
   will-change: transform;
   border-radius: 1rem;
   display: flex;
@@ -100,7 +128,6 @@ body {
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  /* overflow: hidden removed — breaks backface-visibility in some browsers */
 }
 
 .flashcard-back {
@@ -143,16 +170,17 @@ body {
 
 /* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #251e42;
+  background: #131027;
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #4a3fc0;
+  background: #2E2A55;
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #6b5cf0;
+  background: #7B6CF5;
 }
+

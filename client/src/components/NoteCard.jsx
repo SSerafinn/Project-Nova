@@ -19,6 +19,33 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+const ACTIONS = [
+  {
+    label: 'Summary',
+    Icon: BookOpenIcon,
+    pathSuffix: '/summary',
+    bg: 'rgba(233,185,73,0.10)',
+    border: 'rgba(233,185,73,0.22)',
+    color: '#E9B949',
+  },
+  {
+    label: 'Flashcards',
+    Icon: LayersIcon,
+    pathSuffix: '/flashcards',
+    bg: 'rgba(123,108,245,0.10)',
+    border: 'rgba(123,108,245,0.22)',
+    color: '#9d8fff',
+  },
+  {
+    label: 'Quiz',
+    Icon: QuestionMarkCircleIcon,
+    pathSuffix: '/quiz',
+    bg: 'rgba(224,123,48,0.10)',
+    border: 'rgba(224,123,48,0.22)',
+    color: '#E07B30',
+  },
+];
+
 export default function NoteCard({ session, onDelete, onFolderChange, folders = [], style }) {
   const navigate = useNavigate();
   const [deleting, setDeleting] = useState(false);
@@ -67,19 +94,19 @@ export default function NoteCard({ session, onDelete, onFolderChange, folders = 
     }
   }
 
-  const actions = [
-    { label: 'Summary', Icon: BookOpenIcon, path: `/notes/${session.id}/summary` },
-    { label: 'Cards', Icon: LayersIcon, path: `/notes/${session.id}/flashcards` },
-    { label: 'Quiz', Icon: QuestionMarkCircleIcon, path: `/notes/${session.id}/quiz` },
-  ];
-
   return (
     <Card className="flex flex-col animate-fadeInUp" style={style}>
+      {/* Gradient accent stripe at top */}
+      <div
+        className="h-0.5 w-full flex-shrink-0"
+        style={{ background: 'linear-gradient(90deg, #E9B949 0%, #7B6CF5 50%, #E07B30 100%)' }}
+      />
+
       <div className="p-5 flex flex-col gap-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <h3 className="font-extrabold text-lg text-white leading-snug line-clamp-2 mb-1.5">
+            <h3 className="font-semibold text-base text-white leading-snug line-clamp-2 mb-1.5">
               {session.title}
             </h3>
             <div className="flex items-center gap-2 flex-wrap">
@@ -90,7 +117,7 @@ export default function NoteCard({ session, onDelete, onFolderChange, folders = 
           <button
             onClick={handleDelete}
             disabled={deleting}
-            className="text-muted hover:text-danger transition-colors p-1 rounded-lg hover:bg-danger/10 shrink-0"
+            className="text-muted hover:text-danger transition-colors p-1.5 rounded-lg hover:bg-danger/10 shrink-0"
             title="Delete note"
           >
             {deleting ? (
@@ -102,26 +129,26 @@ export default function NoteCard({ session, onDelete, onFolderChange, folders = 
         </div>
 
         {/* Stats */}
-        <div className="flex items-center gap-3 text-xs text-muted font-semibold">
+        <div className="flex items-center gap-3 text-xs text-muted font-medium">
           <div className="flex items-center gap-1.5">
-            <LayersIcon className="w-3.5 h-3.5 text-primary" />
-            <span>{session.flashcard_count ?? 0} flashcards</span>
+            <LayersIcon className="w-3.5 h-3.5" style={{ color: '#9d8fff' }} />
+            <span>{session.flashcard_count ?? 0} cards</span>
           </div>
-          <span className="opacity-40">•</span>
+          <span className="opacity-30">•</span>
           <div className="flex items-center gap-1.5">
-            <QuestionMarkCircleIcon className="w-3.5 h-3.5 text-primary" />
+            <QuestionMarkCircleIcon className="w-3.5 h-3.5" style={{ color: '#E07B30' }} />
             <span>{session.quiz_count ?? 0} questions</span>
           </div>
         </div>
 
-        {/* Folder row */}
+        {/* Folder assignment */}
         <div className="relative" ref={pickerRef}>
           <button
             onClick={(e) => { e.stopPropagation(); setShowFolderPicker((v) => !v); }}
             disabled={movingFolder}
-            className={`flex items-center gap-1.5 text-xs font-bold px-2.5 py-1.5 rounded-lg transition-colors ${
+            className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg transition-colors ${
               currentFolderName
-                ? 'bg-secondary/20 text-secondary hover:bg-secondary/30'
+                ? 'bg-secondary/15 text-secondary hover:bg-secondary/25'
                 : 'bg-white/5 text-muted hover:bg-white/10 hover:text-white'
             }`}
             title="Assign to folder"
@@ -135,16 +162,19 @@ export default function NoteCard({ session, onDelete, onFolderChange, folders = 
           </button>
 
           {showFolderPicker && (
-            <div className="absolute left-0 top-full mt-1 z-50 bg-surface border border-border/60 rounded-xl shadow-xl overflow-hidden min-w-[180px]">
+            <div
+              className="absolute left-0 top-full mt-1 z-50 rounded-xl shadow-xl overflow-hidden min-w-[180px]"
+              style={{ background: '#1a1535', border: '1px solid rgba(123,108,245,0.2)' }}
+            >
               {folders.length === 0 ? (
-                <p className="text-muted text-xs font-semibold px-4 py-3">No folders yet</p>
+                <p className="text-muted text-xs font-medium px-4 py-3">No folders yet</p>
               ) : (
                 <ul>
                   {folders.map((f) => (
                     <li key={f.id}>
                       <button
                         onClick={() => handleFolderSelect(f)}
-                        className="w-full text-left px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition-colors flex items-center gap-2"
+                        className="w-full text-left px-4 py-2.5 text-sm font-medium text-white hover:bg-white/8 transition-colors flex items-center gap-2"
                       >
                         <FolderIcon className="w-3.5 h-3.5 text-secondary shrink-0" />
                         {f.name}
@@ -158,10 +188,10 @@ export default function NoteCard({ session, onDelete, onFolderChange, folders = 
               )}
               {currentFolderName && (
                 <>
-                  <div className="border-t border-border/40" />
+                  <div className="border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }} />
                   <button
                     onClick={() => handleFolderSelect(null)}
-                    className="w-full text-left px-4 py-2.5 text-sm font-semibold text-muted hover:text-danger hover:bg-danger/10 transition-colors"
+                    className="w-full text-left px-4 py-2.5 text-sm font-medium text-muted hover:text-danger hover:bg-danger/10 transition-colors"
                   >
                     Remove from folder
                   </button>
@@ -171,17 +201,18 @@ export default function NoteCard({ session, onDelete, onFolderChange, folders = 
           )}
         </div>
 
-        {/* Action buttons */}
-        <div className="flex gap-3">
-          {actions.map(({ label, Icon, path }) => (
+        {/* Action buttons — each with a distinct color */}
+        <div className="grid grid-cols-3 gap-2">
+          {ACTIONS.map(({ label, Icon, pathSuffix, bg, border, color }) => (
             <button
               key={label}
-              onClick={() => navigate(path)}
-              className="btn-chunky w-14 h-14 rounded-2xl bg-primary hover:bg-primary-dark flex items-center justify-center transition-colors"
-              style={{ boxShadow: '0px 4px 0px #D4A800' }}
+              onClick={() => navigate(`/notes/${session.id}${pathSuffix}`)}
+              className="flex flex-col items-center gap-1.5 py-2.5 px-1 rounded-xl font-semibold text-xs transition-all hover:scale-[1.04] active:scale-95"
+              style={{ background: bg, border: `1px solid ${border}`, color }}
               title={label}
             >
-              <Icon className="w-6 h-6 text-[#1C1733]" />
+              <Icon className="w-4 h-4" />
+              {label}
             </button>
           ))}
         </div>
