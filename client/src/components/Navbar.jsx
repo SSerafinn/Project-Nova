@@ -11,15 +11,9 @@ export default function Navbar() {
 
       <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 no-underline group">
-          <span className="text-primary font-bold text-xs opacity-60 group-hover:opacity-100 transition-opacity">✦</span>
-          <span
-            className="text-xl font-bold tracking-[0.2em] text-white"
-            style={{ textShadow: '0 0 20px rgba(233,185,73,0.4)' }}
-          >
-            NOVA
-          </span>
-        </Link>
+          <Link to="/" className="flex items-center no-underline hover:scale-105 transition-transform duration-300">
+            <img src="/nova_logo.png" alt="NOVA Logo" className="h-7 w-auto drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" />
+          </Link>
 
         {/* Nav links */}
         <div className="flex items-center gap-1">

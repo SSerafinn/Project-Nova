@@ -28,11 +28,8 @@ export default function Login() {
           <div className="absolute inset-0 bg-surface/40 z-0"></div>
 
           <div className="relative z-10 flex-1 flex flex-col">
-            <div className="flex items-center gap-2 mb-12">
-              <span className="text-primary font-bold text-lg">✦</span>
-              <span className="text-3xl font-black tracking-[0.2em] text-white" style={{ textShadow: '0 0 20px rgba(233,185,73,0.4)' }}>
-                NOVA
-              </span>
+            <div className="flex items-center mb-12">
+              <img src="/nova_logo.png" alt="NOVA Logo" className="h-10 w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" />
             </div>
 
             <div className="mt-auto md:mb-12">
