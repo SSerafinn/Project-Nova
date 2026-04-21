@@ -1,28 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 import { getNoteById, regenerateSummary } from '../services/api';
-import { BookOpenIcon, ArrowPathIcon, KeyIcon, ListBulletIcon, CheckIcon } from '../components/Icons';
+import { BookOpenIcon, ArrowPathIcon, LayersIcon, QuestionMarkCircleIcon, SpinnerIcon } from '../components/Icons';
 
-function Section({ title, icon: Icon, children, defaultOpen = true }) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <Card className="overflow-hidden">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-6 py-4 font-extrabold text-white hover:bg-white/5 transition-colors"
-      >
-        <span className="flex items-center gap-2">
-          {Icon && <Icon className="w-4 h-4 text-primary" />}
-          {title}
-        </span>
-        <span className="text-muted text-lg">{open ? '▲' : '▼'}</span>
-      </button>
-      {open && <div className="px-6 pb-6">{children}</div>}
-    </Card>
-  );
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+function estimateReadTime(terms = [], takeaways = []) {
+  const words = (terms.length * 20) + (takeaways.length * 15);
+  return Math.max(1, Math.ceil(words / 200));
 }
 
 export default function Summary() {
@@ -33,9 +23,7 @@ export default function Summary() {
   const [regenerating, setRegenerating] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    loadSession();
-  }, [id]);
+  useEffect(() => { loadSession(); }, [id]);
 
   async function loadSession() {
     setLoading(true);
@@ -75,94 +63,187 @@ export default function Summary() {
     return (
       <div className="max-w-2xl mx-auto px-4 py-10 text-center">
         <p className="text-danger font-bold">{error || 'Session not found.'}</p>
-        <button onClick={() => navigate('/')} className="mt-4 text-primary font-bold underline">
-          Go back home
-        </button>
+        <button onClick={() => navigate('/')} className="mt-4 text-primary font-bold underline">Go back home</button>
       </div>
     );
   }
 
   const summary = session.summary?.content;
+  const keyConcepts = summary?.keyConcepts || [];
+  const importantTerms = summary?.importantTerms || [];
+  const keyTakeaways = summary?.keyTakeaways || [];
+  const readTime = estimateReadTime(importantTerms, keyTakeaways);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      {/* Header */}
-      <div className="mb-8">
-        <button
-          onClick={() => navigate('/')}
-          className="text-muted hover:text-white font-semibold text-sm flex items-center gap-1 mb-4 transition-colors"
-        >
-          ← Back to Notes
-        </button>
-        <div className="flex items-start justify-between gap-4">
-          <h1 className="text-2xl font-black text-white leading-snug">{session.title}</h1>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleRegenerate}
-            loading={regenerating}
-            className="shrink-0 flex items-center gap-1.5"
-          >
-            <ArrowPathIcon className="w-4 h-4" />
-            Regenerate
-          </Button>
-        </div>
-      </div>
 
-      {!summary ? (
-        <Card className="p-8 text-center">
-          <p className="text-muted font-semibold">No summary yet. Click Regenerate to create one.</p>
-        </Card>
-      ) : (
-        <div className="flex flex-col gap-5">
-          <Section title="Key Concepts" icon={KeyIcon}>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {(summary.keyConcepts || []).map((concept, i) => (
-                <Badge key={i} label={concept} variant="concept" />
-              ))}
+      {/* Back nav */}
+      <button
+        onClick={() => navigate('/')}
+        className="text-muted hover:text-white font-semibold text-sm flex items-center gap-1 mb-6 transition-colors"
+      >
+        ← Back to Notes
+      </button>
+
+      {/* ── Book Cover ─────────────────────────────────────────────── */}
+      <div
+        className="relative rounded-3xl overflow-hidden mb-8 p-8"
+        style={{
+          background: 'linear-gradient(135deg, #251E42 0%, #1C1733 60%, #2D2560 100%)',
+          border: '1px solid rgba(107,92,240,0.3)',
+          boxShadow: '0px 6px 0px #13102B',
+        }}
+      >
+        {/* Decorative spine line */}
+        <div className="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-3xl bg-gradient-to-b from-primary via-secondary to-accent" />
+
+        {/* Top row */}
+        <div className="flex items-start justify-between gap-4 pl-4">
+          <div className="flex-1">
+            <p className="text-xs font-black text-secondary/70 tracking-widest uppercase mb-2">Study Notes</p>
+            <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight mb-3">{session.title}</h1>
+            <div className="flex items-center gap-3 flex-wrap">
+              <Badge label={session.source === 'pdf' ? 'PDF' : 'Text'} variant={session.source} />
+              <span className="text-xs text-muted font-semibold">{formatDate(session.created_at)}</span>
+              <span className="text-xs text-muted font-semibold">· {readTime} min read</span>
             </div>
-          </Section>
+          </div>
 
-          <Section title="Important Terms" icon={ListBulletIcon}>
-            <div className="flex flex-col gap-3 mt-2">
-              {(summary.importantTerms || []).map((item, i) => (
-                <div key={i} className="bg-secondary/10 border border-secondary/20 rounded-2xl px-4 py-3">
-                  <span className="font-extrabold text-secondary">{item.term}</span>
-                  <span className="text-white/80 ml-2">— {item.definition}</span>
+          {/* Regenerate */}
+          <button
+            onClick={handleRegenerate}
+            disabled={regenerating}
+            className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-muted hover:text-white font-bold text-xs transition-colors border border-white/10"
+          >
+            {regenerating
+              ? <SpinnerIcon className="w-3.5 h-3.5 animate-spin" />
+              : <ArrowPathIcon className="w-3.5 h-3.5" />
+            }
+            Regenerate
+          </button>
+        </div>
+
+        {/* Table of contents */}
+        {summary && (
+          <div className="mt-6 pl-4">
+            <p className="text-xs font-black text-muted/60 tracking-widest uppercase mb-2">Contents</p>
+            <div className="flex flex-col gap-1">
+              {[
+                { num: '01', label: 'Key Concepts', count: keyConcepts.length },
+                { num: '02', label: 'Important Terms', count: importantTerms.length },
+                { num: '03', label: 'Key Takeaways', count: keyTakeaways.length },
+              ].map(({ num, label, count }) => (
+                <div key={num} className="flex items-center gap-3 text-sm">
+                  <span className="font-black text-primary/60 text-xs w-6">{num}</span>
+                  <span className="flex-1 border-b border-dashed border-white/10" />
+                  <span className="font-bold text-white/70">{label}</span>
+                  <span className="text-xs text-muted font-semibold w-8 text-right">{count}</span>
                 </div>
               ))}
             </div>
-          </Section>
+          </div>
+        )}
+      </div>
 
-          <Section title="Key Takeaways" icon={CheckIcon}>
-            <ul className="flex flex-col gap-3 mt-2">
-              {(summary.keyTakeaways || []).map((takeaway, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="text-primary font-black text-lg mt-0.5">✓</span>
-                  <span className="text-white/90 font-semibold">{takeaway}</span>
-                </li>
-              ))}
-            </ul>
-          </Section>
+      {!summary ? (
+        <div className="bg-surface border border-border/50 rounded-3xl p-10 text-center">
+          <BookOpenIcon className="w-10 h-10 text-muted mx-auto mb-3" />
+          <p className="text-muted font-semibold">No summary yet.</p>
+          <button onClick={handleRegenerate} className="mt-4 text-primary font-bold text-sm underline">Generate one now</button>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-6">
+
+          {/* ── Section 01: Key Concepts ───────────────────────────── */}
+          <div className="bg-surface border border-border/50 rounded-3xl overflow-hidden" style={{ boxShadow: '0px 4px 0px #13102B' }}>
+            <div className="flex items-center gap-3 px-6 py-4 border-b border-border/30">
+              <span className="text-xs font-black text-primary/50 tracking-widest">01</span>
+              <div className="w-px h-4 bg-border/50" />
+              <h2 className="font-black text-white text-base">Key Concepts</h2>
+            </div>
+            <div className="px-6 py-5">
+              {keyConcepts.length === 0 ? (
+                <p className="text-muted text-sm">No concepts found.</p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {keyConcepts.map((concept, i) => (
+                    <span
+                      key={i}
+                      className="px-3.5 py-1.5 rounded-xl text-sm font-bold bg-primary/15 text-primary border border-primary/20"
+                    >
+                      {concept}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── Section 02: Important Terms ────────────────────────── */}
+          <div className="bg-surface border border-border/50 rounded-3xl overflow-hidden" style={{ boxShadow: '0px 4px 0px #13102B' }}>
+            <div className="flex items-center gap-3 px-6 py-4 border-b border-border/30">
+              <span className="text-xs font-black text-primary/50 tracking-widest">02</span>
+              <div className="w-px h-4 bg-border/50" />
+              <h2 className="font-black text-white text-base">Important Terms</h2>
+            </div>
+            <div className="divide-y divide-border/20">
+              {importantTerms.length === 0 ? (
+                <p className="text-muted text-sm px-6 py-5">No terms found.</p>
+              ) : (
+                importantTerms.map((item, i) => (
+                  <div key={i} className="px-6 py-4 flex gap-4 items-start group hover:bg-white/[0.02] transition-colors">
+                    {/* Index number */}
+                    <span className="text-xs font-black text-muted/40 mt-0.5 w-5 shrink-0 text-right">{String(i + 1).padStart(2, '0')}</span>
+                    {/* Left accent */}
+                    <div className="w-0.5 self-stretch bg-secondary/40 rounded-full shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-black text-secondary text-sm leading-snug">{item.term}</p>
+                      <p className="text-white/75 text-sm font-medium mt-1 leading-relaxed">{item.definition}</p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* ── Section 03: Key Takeaways ──────────────────────────── */}
+          <div className="bg-surface border border-border/50 rounded-3xl overflow-hidden" style={{ boxShadow: '0px 4px 0px #13102B' }}>
+            <div className="flex items-center gap-3 px-6 py-4 border-b border-border/30">
+              <span className="text-xs font-black text-primary/50 tracking-widest">03</span>
+              <div className="w-px h-4 bg-border/50" />
+              <h2 className="font-black text-white text-base">Key Takeaways</h2>
+            </div>
+            <div className="px-6 py-5 flex flex-col gap-3">
+              {keyTakeaways.length === 0 ? (
+                <p className="text-muted text-sm">No takeaways found.</p>
+              ) : (
+                keyTakeaways.map((takeaway, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    {/* Number badge */}
+                    <span
+                      className="shrink-0 w-6 h-6 rounded-lg flex items-center justify-center text-xs font-black text-[#1C1733] mt-0.5"
+                      style={{ background: 'linear-gradient(135deg, #F5C518, #C86A14)' }}
+                    >
+                      {i + 1}
+                    </span>
+                    <p className="text-white/85 font-semibold text-sm leading-relaxed flex-1">{takeaway}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
         </div>
       )}
 
-      {/* CTA Buttons */}
+      {/* ── CTA ────────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row gap-3 mt-8">
-        <Button
-          variant="secondary"
-          size="lg"
-          onClick={() => navigate(`/notes/${id}/flashcards`)}
-          className="flex-1"
-        >
+        <Button variant="secondary" size="lg" onClick={() => navigate(`/notes/${id}/flashcards`)} className="flex-1 flex items-center justify-center gap-2">
+          <LayersIcon className="w-4 h-4" />
           Study Flashcards
         </Button>
-        <Button
-          variant="primary"
-          size="lg"
-          onClick={() => navigate(`/notes/${id}/quiz`)}
-          className="flex-1"
-        >
+        <Button variant="primary" size="lg" onClick={() => navigate(`/notes/${id}/quiz`)} className="flex-1 flex items-center justify-center gap-2">
+          <QuestionMarkCircleIcon className="w-4 h-4" />
           Take Quiz
         </Button>
       </div>

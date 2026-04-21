@@ -120,15 +120,13 @@ export default function Home() {
           </div>
 
           {/* New Folder */}
-          {view === 'solar' && (
-            <button
-              onClick={() => setShowFolderInput((v) => !v)}
-              className="btn-chunky bg-secondary text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-secondary-dark transition-colors"
-              style={{ boxShadow: '0px 3px 0px #5448D0' }}
-            >
-              + Folder
-            </button>
-          )}
+          <button
+            onClick={() => setShowFolderInput((v) => !v)}
+            className="btn-chunky bg-secondary text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-secondary-dark transition-colors"
+            style={{ boxShadow: '0px 3px 0px #5448D0' }}
+          >
+            + Folder
+          </button>
         </div>
       </div>
 
@@ -201,7 +199,34 @@ export default function Home() {
       {/* Grid view */}
       {!loading && !error && view === 'grid' && (
         <>
-          {sessions.length === 0 ? (
+          {/* Folders row */}
+          {folders.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-lg font-black text-white mb-4">Folders</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {folders.map((folder, i) => (
+                  <button
+                    key={folder.id}
+                    onClick={() => navigate(`/folders/${folder.id}`)}
+                    className="flex flex-col items-center gap-2 p-5 rounded-2xl bg-surface border border-border/50 hover:border-secondary/60 hover:bg-secondary/10 transition-all group animate-fadeInUp"
+                    style={{ boxShadow: '0px 4px 0px #13102B', animationDelay: `${i * 0.05}s`, opacity: 0 }}
+                  >
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-white text-lg group-hover:scale-110 transition-transform"
+                      style={{ background: `hsl(${(i * 60) % 360}, 65%, 55%)` }}
+                    >
+                      {folder.name.charAt(0).toUpperCase()}
+                    </div>
+                    <p className="font-bold text-white text-sm text-center line-clamp-1 w-full">{folder.name}</p>
+                    <p className="text-xs text-muted font-semibold">{folder.note_count ?? 0} note{folder.note_count !== 1 ? 's' : ''}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Notes */}
+          {sessions.length === 0 && folders.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-24 gap-5 text-center">
               <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
                 <BookOpenIcon className="w-10 h-10 text-primary" />
@@ -218,17 +243,22 @@ export default function Home() {
                 Upload Your First Note
               </button>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {sessions.map((session, i) => (
-                <NoteCard
-                  key={session.id}
-                  session={session}
-                  onDelete={handleDelete}
-                  style={{ animationDelay: `${i * 0.07}s`, opacity: 0 }}
-                />
-              ))}
-            </div>
+          ) : sessions.length > 0 && (
+            <>
+              <h2 className="text-lg font-black text-white mb-4">All Notes</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {sessions.map((session, i) => (
+                  <NoteCard
+                    key={session.id}
+                    session={session}
+                    onDelete={handleDelete}
+                    onFolderChange={handleFolderChange}
+                    folders={folders}
+                    style={{ animationDelay: `${i * 0.07}s`, opacity: 0 }}
+                  />
+                ))}
+              </div>
+            </>
           )}
         </>
       )}
