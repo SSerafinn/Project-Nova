@@ -9,6 +9,7 @@ import Quiz from './pages/Quiz';
 import FolderView from './pages/FolderView';
 import FolderQuiz from './pages/FolderQuiz';
 import Profile from './pages/Profile';
+import Login from './pages/Login';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
       <main className="min-h-screen bg-bg pt-16">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/notes/:id/summary" element={<Summary />} />
           <Route path="/notes/:id/flashcards" element={<Flashcards />} />

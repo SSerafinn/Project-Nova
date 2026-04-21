@@ -50,6 +50,17 @@ export default function Navbar() {
             )}
           </Link>
 
+          <Link
+            to="/login"
+            className={`relative px-4 py-2 rounded-xl font-semibold text-sm transition-all no-underline ${
+              isActive('/login')
+                ? 'text-primary'
+                : 'text-muted hover:text-white hover:bg-white/5'
+            }`}
+          >
+            Log In
+          </Link>
+
           {/* Profile avatar */}
           <Link
             to="/profile"
