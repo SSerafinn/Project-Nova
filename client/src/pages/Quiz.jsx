@@ -41,6 +41,8 @@ export default function Quiz() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [allQuestions, setAllQuestions] = useState([]);
+  const [setupMode, setSetupMode] = useState(false);
+  
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -53,13 +55,30 @@ export default function Quiz() {
     getNoteById(id)
       .then((res) => {
         setSessionTitle(res.data.title);
-        const shuffled = fisherYates(res.data.quiz || []);
-        setAllQuestions(res.data.quiz || []);
-        setQuestions(shuffled);
+        const fetchedQuiz = res.data.quiz || [];
+        setAllQuestions(fetchedQuiz);
+        if (fetchedQuiz.length > 10) {
+          setSetupMode(true);
+        } else {
+          setQuestions(fisherYates(fetchedQuiz));
+          setSetupMode(false);
+        }
       })
       .catch(() => setError('Failed to load quiz.'))
       .finally(() => setLoading(false));
   }, [id]);
+
+  function startQuiz(mode) {
+    if (mode === 'quick') {
+      setQuestions(fisherYates(allQuestions).slice(0, 10));
+    } else {
+      setQuestions(fisherYates(allQuestions));
+    }
+    setSetupMode(false);
+    setCurrentIndex(0);
+    setScore(0);
+    setQuizComplete(false);
+  }
 
   function handleAnswer(isCorrect) {
     const newScore = isCorrect ? score + 1 : score;
@@ -74,10 +93,14 @@ export default function Quiz() {
   }
 
   function handleRetry() {
-    setQuestions(fisherYates(allQuestions));
-    setCurrentIndex(0);
-    setScore(0);
-    setQuizComplete(false);
+    if (allQuestions.length > 10) {
+      setSetupMode(true);
+    } else {
+      setQuestions(fisherYates(allQuestions));
+      setCurrentIndex(0);
+      setScore(0);
+      setQuizComplete(false);
+    }
   }
 
   if (loading) {
@@ -89,13 +112,42 @@ export default function Quiz() {
     );
   }
 
-  if (error || questions.length === 0) {
+  if (error || allQuestions.length === 0) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-10 text-center">
         <p className="text-muted font-bold mb-4">{error || 'No quiz questions found for this note.'}</p>
         <Button variant="ghost" onClick={() => navigate(`/notes/${id}/summary`)}>
           Back to Summary
         </Button>
+      </div>
+    );
+  }
+
+  if (setupMode) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-16 flex flex-col items-center text-center animate-fadeInUp">
+        <div className="mb-8 w-full flex justify-start">
+          <button
+            onClick={() => navigate(`/notes/${id}/summary`)}
+            className="text-muted hover:text-white font-semibold text-sm flex items-center gap-1 transition-colors"
+          >
+            ← Back to Summary
+          </button>
+        </div>
+        <QuestionMarkCircleIcon className="w-16 h-16 text-primary mb-6 drop-shadow-lg" />
+        <h1 className="text-3xl font-black text-white mb-3">Quiz Setup</h1>
+        <p className="text-muted font-medium mb-10 text-lg">
+          This note has a generated bank of <strong className="text-white">{allQuestions.length} questions</strong>. How would you like to study?
+        </p>
+
+        <div className="flex flex-col gap-4 w-full">
+          <Button variant="primary" size="lg" onClick={() => startQuiz('quick')} style={{ boxShadow: '0px 4px 0px #C99A32' }}>
+            Quick Session (10 Questions)
+          </Button>
+          <Button variant="secondary" size="lg" onClick={() => startQuiz('full')} style={{ boxShadow: '0px 4px 0px #5448D0' }}>
+            Full Bank ({allQuestions.length} Questions)
+          </Button>
+        </div>
       </div>
     );
   }
@@ -166,17 +218,18 @@ export default function Quiz() {
         </p>
       </div>
 
-      <div className="bg-surface rounded-2xl border border-border/50 shadow-card p-6">
+      <div className="bg-white/[0.04] backdrop-blur-sm rounded-3xl border border-white/[0.08] p-6 sm:p-8 shimmer-top relative">
         <QuizQuestion
-          key={question.id}
+          key={`${currentIndex}-${question.question}`}
           question={question.question}
           choices={question.choices}
           correctAnswer={question.answer}
+          explanation={question.explanation}
           onAnswer={handleAnswer}
         />
       </div>
 
-      <p className="text-center text-sm text-muted font-semibold mt-4">
+      <p className="text-center text-sm text-muted font-semibold mt-6">
         Score so far: {score} / {currentIndex}
       </p>
     </div>

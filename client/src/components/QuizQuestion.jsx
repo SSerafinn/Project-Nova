@@ -13,9 +13,10 @@ function getChoiceStyle(choice, selected, correct, revealed) {
   return 'border-border/30 bg-white/[0.03] text-muted opacity-50';
 }
 
-export default function QuizQuestion({ question, choices, correctAnswer, onAnswer }) {
+export default function QuizQuestion({ question, choices, correctAnswer, explanation, onAnswer }) {
   const [selected, setSelected] = useState(null);
   const [revealed, setRevealed] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(null);
 
   function handleSelect(choice) {
     if (revealed) return;
@@ -25,9 +26,10 @@ export default function QuizQuestion({ question, choices, correctAnswer, onAnswe
   function handleCheck() {
     if (!selected) return;
     setRevealed(true);
-    const isCorrect = selected === correctAnswer;
+    const correct = selected === correctAnswer;
+    setIsCorrect(correct);
 
-    if (isCorrect) {
+    if (correct) {
       confetti({
         particleCount: 120,
         spread: 80,
@@ -36,8 +38,10 @@ export default function QuizQuestion({ question, choices, correctAnswer, onAnswe
         colors: ['#F5C518', '#D4A800', '#FFF9E6', '#6B5CF0'],
       });
     }
+  }
 
-    setTimeout(() => onAnswer(isCorrect), 1200);
+  function handleNext() {
+    onAnswer(isCorrect);
   }
 
   return (
@@ -69,17 +73,26 @@ export default function QuizQuestion({ question, choices, correctAnswer, onAnswe
       {revealed && (
         <div
           className={`
-            rounded-2xl px-5 py-3 font-bold text-sm animate-bounceIn flex items-center gap-2
+            rounded-2xl px-5 py-4 animate-bounceIn flex flex-col gap-2
             ${selected === correctAnswer
-              ? 'bg-primary/20 text-primary border border-primary/30'
-              : 'bg-danger/20 text-danger border border-danger/30'
+              ? 'bg-primary/10 border border-primary/30'
+              : 'bg-danger/10 border border-danger/30'
             }
           `}
         >
-          {selected === correctAnswer ? (
-            <><CheckIcon className="w-4 h-4 shrink-0" /> Correct! Great job!</>
-          ) : (
-            <><XMarkIcon className="w-4 h-4 shrink-0" /> Not quite! The answer was: &ldquo;{correctAnswer}&rdquo;</>
+          <div className={`font-bold flex items-center gap-2 ${selected === correctAnswer ? 'text-primary' : 'text-danger'}`}>
+            {selected === correctAnswer ? (
+              <><CheckIcon className="w-5 h-5 shrink-0" /> Correct! Great job!</>
+            ) : (
+              <><XMarkIcon className="w-5 h-5 shrink-0" /> Not quite! The answer was: &ldquo;{correctAnswer}&rdquo;</>
+            )}
+          </div>
+          
+          {/* Explanation */}
+          {explanation && (
+            <p className="text-white/80 text-sm leading-relaxed mt-1 border-t border-white/10 pt-3">
+              {explanation}
+            </p>
           )}
         </div>
       )}
@@ -92,6 +105,17 @@ export default function QuizQuestion({ question, choices, correctAnswer, onAnswe
           style={{ boxShadow: '0px 4px 0px #D4A800' }}
         >
           Check Answer
+        </button>
+      )}
+
+      {/* Next button */}
+      {revealed && (
+        <button
+          onClick={handleNext}
+          className="btn-chunky w-full bg-secondary text-white py-3.5 rounded-2xl font-extrabold text-base transition-colors hover:bg-secondary-dark animate-bounceIn"
+          style={{ boxShadow: '0px 4px 0px #5448D0' }}
+        >
+          Next Question ➔
         </button>
       )}
     </div>

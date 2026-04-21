@@ -4,6 +4,14 @@ const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const MIN_TEXT_LENGTH = 50;
 
+function calculateTargetCount(text) {
+  const wordCount = text.split(/\s+/).filter(Boolean).length;
+  // approximately 1 question/card per 50 words
+  const count = Math.ceil(wordCount / 50);
+  // clamp between 5 and 35 to prevent AI breaking
+  return Math.max(5, Math.min(35, count));
+}
+
 async function callAI(prompt) {
   const response = await client.chat.completions.create({
     model: 'gpt-4o-mini',
@@ -47,6 +55,8 @@ async function generateFlashcards(text) {
     throw new Error('Notes are too short to generate flashcards. Please provide more content.');
   }
 
+  const targetCount = calculateTargetCount(text);
+
   const prompt = `You are a study assistant. Based on these student notes, create flashcards for review as JSON.
 
 Return a JSON object with this exact shape:
@@ -56,7 +66,7 @@ Return a JSON object with this exact shape:
   ]
 }
 
-Generate between 8 and 15 flashcards. Focus on key terms, concepts, and facts.
+Generate exactly ${targetCount} flashcards. Focus on key terms, concepts, and facts.
 
 Notes:
 ${text}`;
@@ -69,6 +79,8 @@ async function generateQuiz(text) {
     throw new Error('Notes are too short to generate a quiz. Please provide more content.');
   }
 
+  const targetCount = calculateTargetCount(text);
+
   const prompt = `You are a study assistant. Based on these student notes, create a multiple-choice quiz as JSON.
 
 Return a JSON object with this exact shape:
@@ -77,13 +89,14 @@ Return a JSON object with this exact shape:
     {
       "question": "string",
       "choices": ["string", "string", "string", "string"],
-      "answer": "string"
+      "answer": "string",
+      "explanation": "string (a brief 1-2 sentence explanation of why this answer is correct)"
     }
   ]
 }
 
 Rules:
-- Generate exactly 10 questions
+- Generate exactly ${targetCount} questions
 - Each question has exactly 4 choices
 - Vary difficulty: mix recall, comprehension, and application questions
 - The answer must exactly match one of the 4 choices verbatim
