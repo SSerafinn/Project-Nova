@@ -5,29 +5,29 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#D4A017',
-          dark: '#B08010',
-          light: '#FEF9E7',
+          DEFAULT: '#F5C518',
+          dark: '#D4A800',
+          light: '#FFF9E6',
         },
         secondary: {
-          DEFAULT: '#78716C',
-          dark: '#57534E',
-          light: '#F5F0E8',
+          DEFAULT: '#6B5CF0',
+          dark: '#5448D0',
+          light: '#2D2560',
         },
         accent: {
           DEFAULT: '#C86A14',
           dark: '#A85510',
-          light: '#FDECD0',
+          light: '#3A2010',
         },
         danger: {
           DEFAULT: '#FF4B4B',
           dark: '#EA2B2B',
-          light: '#FFDDDD',
+          light: '#3D1010',
         },
-        surface: '#FFFFFF',
-        bg: '#FFFBF0',
-        muted: '#A09060',
-        border: '#E8DDB0',
+        surface: '#251E42',
+        bg: '#1C1733',
+        muted: '#9896BB',
+        border: '#4A3FC0',
       },
       fontFamily: {
         sans: ['Nunito', 'sans-serif'],
@@ -39,9 +39,9 @@ export default {
         '4xl': '2rem',
       },
       boxShadow: {
-        card: '0px 4px 0px #C8B870',
-        'card-primary': '0px 4px 0px #B08010',
-        'card-secondary': '0px 4px 0px #57534E',
+        card: '0px 4px 0px #13102B',
+        'card-primary': '0px 4px 0px #D4A800',
+        'card-secondary': '0px 4px 0px #5448D0',
         'card-danger': '0px 4px 0px #EA2B2B',
       },
       keyframes: {

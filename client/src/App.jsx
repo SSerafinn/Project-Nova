@@ -6,6 +6,8 @@ import Upload from './pages/Upload';
 import Summary from './pages/Summary';
 import Flashcards from './pages/Flashcards';
 import Quiz from './pages/Quiz';
+import FolderView from './pages/FolderView';
+import FolderQuiz from './pages/FolderQuiz';
 
 export default function App() {
   return (
@@ -18,6 +20,8 @@ export default function App() {
           <Route path="/notes/:id/summary" element={<Summary />} />
           <Route path="/notes/:id/flashcards" element={<Flashcards />} />
           <Route path="/notes/:id/quiz" element={<Quiz />} />
+          <Route path="/folders/:id" element={<FolderView />} />
+          <Route path="/folders/:id/quiz" element={<FolderQuiz />} />
         </Routes>
       </main>
     </>

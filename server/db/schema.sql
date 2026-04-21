@@ -1,7 +1,14 @@
+CREATE TABLE IF NOT EXISTS folders (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  name       TEXT NOT NULL,
+  created_at TEXT DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS sessions (
   id         INTEGER PRIMARY KEY AUTOINCREMENT,
   title      TEXT NOT NULL,
   source     TEXT NOT NULL CHECK(source IN ('text', 'pdf')),
+  folder_id  INTEGER REFERENCES folders(id) ON DELETE SET NULL,
   created_at TEXT DEFAULT (datetime('now'))
 );
 

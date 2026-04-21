@@ -5,13 +5,12 @@ import { CheckIcon, XMarkIcon } from './Icons';
 function getChoiceStyle(choice, selected, correct, revealed) {
   if (!revealed) {
     return selected === choice
-      ? 'border-secondary bg-secondary-light text-secondary-dark font-bold scale-[1.01]'
-      : 'border-border bg-surface hover:border-secondary hover:bg-secondary-light/40';
+      ? 'border-secondary bg-secondary/20 text-white font-bold scale-[1.01]'
+      : 'border-border/60 bg-white/5 text-white hover:border-secondary hover:bg-secondary/10';
   }
-  // After reveal
-  if (choice === correct) return 'border-primary bg-primary-light text-primary-dark font-bold';
-  if (choice === selected && choice !== correct) return 'border-danger bg-danger-light text-danger-dark font-bold animate-shake';
-  return 'border-border bg-surface opacity-50';
+  if (choice === correct) return 'border-primary bg-primary/20 text-white font-bold';
+  if (choice === selected && choice !== correct) return 'border-danger bg-danger/20 text-white font-bold animate-shake';
+  return 'border-border/30 bg-white/[0.03] text-muted opacity-50';
 }
 
 export default function QuizQuestion({ question, choices, correctAnswer, onAnswer }) {
@@ -34,18 +33,17 @@ export default function QuizQuestion({ question, choices, correctAnswer, onAnswe
         spread: 80,
         angle: 90,
         origin: { y: 0.55 },
-        colors: ['#D4A017', '#C86A14', '#B08010', '#FEF9E7'],
+        colors: ['#F5C518', '#D4A800', '#FFF9E6', '#6B5CF0'],
       });
     }
 
-    // Delay advancing so the user can see the feedback
     setTimeout(() => onAnswer(isCorrect), 1200);
   }
 
   return (
     <div className="flex flex-col gap-4">
       {/* Question text */}
-      <p className="text-lg md:text-xl font-extrabold text-[#3C3C3C] leading-snug">
+      <p className="text-lg md:text-xl font-extrabold text-white leading-snug">
         {question}
       </p>
 
@@ -71,20 +69,18 @@ export default function QuizQuestion({ question, choices, correctAnswer, onAnswe
       {revealed && (
         <div
           className={`
-            rounded-2xl px-5 py-3 font-bold text-sm animate-bounceIn
+            rounded-2xl px-5 py-3 font-bold text-sm animate-bounceIn flex items-center gap-2
             ${selected === correctAnswer
-              ? 'bg-primary-light text-primary-dark'
-              : 'bg-danger-light text-danger-dark'
+              ? 'bg-primary/20 text-primary border border-primary/30'
+              : 'bg-danger/20 text-danger border border-danger/30'
             }
           `}
         >
-          <span className="flex items-center gap-2">
-            {selected === correctAnswer ? (
-              <><CheckIcon className="w-4 h-4 shrink-0" /> Correct! Great job!</>
-            ) : (
-              <><XMarkIcon className="w-4 h-4 shrink-0" /> Not quite! The answer was: &ldquo;{correctAnswer}&rdquo;</>
-            )}
-          </span>
+          {selected === correctAnswer ? (
+            <><CheckIcon className="w-4 h-4 shrink-0" /> Correct! Great job!</>
+          ) : (
+            <><XMarkIcon className="w-4 h-4 shrink-0" /> Not quite! The answer was: &ldquo;{correctAnswer}&rdquo;</>
+          )}
         </div>
       )}
 
@@ -92,8 +88,8 @@ export default function QuizQuestion({ question, choices, correctAnswer, onAnswe
       {!revealed && selected && (
         <button
           onClick={handleCheck}
-          className="btn-chunky w-full bg-primary text-white py-3.5 rounded-2xl font-extrabold text-base transition-colors hover:bg-primary-dark animate-bounceIn"
-          style={{ boxShadow: '0px 4px 0px #B08010' }}
+          className="btn-chunky w-full bg-primary text-[#1C1733] py-3.5 rounded-2xl font-extrabold text-base transition-colors hover:bg-primary-dark animate-bounceIn"
+          style={{ boxShadow: '0px 4px 0px #D4A800' }}
         >
           Check Answer
         </button>

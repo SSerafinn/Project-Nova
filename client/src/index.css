@@ -4,23 +4,23 @@
 
 /* ─── CSS Custom Properties ───────────────────────────────────────────────── */
 :root {
-  --color-primary: #d4a017;
-  --color-primary-dark: #b08010;
-  --color-primary-light: #fef9e7;
-  --color-secondary: #78716c;
-  --color-secondary-dark: #57534e;
-  --color-secondary-light: #f5f0e8;
+  --color-primary: #f5c518;
+  --color-primary-dark: #d4a800;
+  --color-primary-light: #fff9e6;
+  --color-secondary: #6b5cf0;
+  --color-secondary-dark: #5448d0;
+  --color-secondary-light: #2d2560;
   --color-accent: #c86a14;
   --color-accent-dark: #a85510;
-  --color-accent-light: #fdecd0;
+  --color-accent-light: #3a2010;
   --color-danger: #ff4b4b;
   --color-danger-dark: #ea2b2b;
-  --color-danger-light: #ffdddd;
-  --color-surface: #ffffff;
-  --color-bg: #fffbf0;
-  --color-text: #3c3c3c;
-  --color-muted: #a09060;
-  --color-border: #e8ddb0;
+  --color-danger-light: #3d1010;
+  --color-surface: #251e42;
+  --color-bg: #1c1733;
+  --color-text: #ffffff;
+  --color-muted: #9896bb;
+  --color-border: #4a3fc0;
 }
 
 /* ─── Base ─────────────────────────────────────────────────────────────────── */
@@ -32,11 +32,19 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  color: #ffffff;
   font-family: 'Nunito', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #1c1733;
+  /* Layered radial-gradient starfield */
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.70) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,0.45) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,0.25) 0.5px, transparent 0.5px);
+  background-size: 160px 120px, 210px 180px, 90px 70px;
+  background-position: 0 0, 80px 60px, 35px 25px;
+  min-height: 100vh;
 }
 
 /* ─── Chunky Button Press Effect ───────────────────────────────────────────── */
@@ -90,16 +98,45 @@ body {
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  overflow: hidden;
 }
 
 .flashcard-back {
   transform: rotateY(180deg);
 }
 
-/* ─── Progress bar shimmer ──────────────────────────────────────────────────── */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+/* ─── Solar System Orbit Animation ─────────────────────────────────────────── */
+.orbit-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  animation: orbit-spin linear infinite;
+  animation-duration: var(--orbit-duration, 20s);
+}
+
+.orbit-planet {
+  position: absolute;
+  left: var(--orbit-radius, 130px);
+  top: 0;
+  animation: orbit-counter-spin linear infinite;
+  animation-duration: var(--orbit-duration, 20s);
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+@keyframes orbit-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes orbit-counter-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(-360deg); }
 }
 
 /* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
@@ -107,13 +144,13 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-border);
+  background: #251e42;
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-muted);
+  background: #4a3fc0;
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #888;
+  background: #6b5cf0;
 }

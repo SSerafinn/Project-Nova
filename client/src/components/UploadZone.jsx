@@ -18,9 +18,9 @@ export default function UploadZone({ onFileAccepted }) {
       className={`
         w-full rounded-2xl border-2 border-dashed p-10 text-center cursor-pointer
         transition-all duration-200 select-none
-        ${isDragReject ? 'border-danger bg-danger-light' : ''}
-        ${isDragActive && !isDragReject ? 'border-primary bg-primary-light scale-[1.01]' : ''}
-        ${!isDragActive && !isDragReject ? 'border-border hover:border-primary hover:bg-primary-light/30' : ''}
+        ${isDragReject ? 'border-danger bg-danger/10' : ''}
+        ${isDragActive && !isDragReject ? 'border-primary bg-primary/10 scale-[1.01]' : ''}
+        ${!isDragActive && !isDragReject ? 'border-border/50 bg-white/5 hover:border-primary hover:bg-primary/5' : ''}
       `}
     >
       <input {...getInputProps()} />
@@ -45,7 +45,7 @@ export default function UploadZone({ onFileAccepted }) {
         ) : (
           <>
             <DocumentTextIcon className="w-10 h-10 text-muted" />
-            <p className="font-bold text-[#3C3C3C]">Drop your PDF here</p>
+            <p className="font-bold text-white">Drop your PDF here</p>
             <p className="text-sm text-muted">or click to browse — max 10 MB</p>
           </>
         )}

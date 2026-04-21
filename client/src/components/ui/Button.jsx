@@ -2,14 +2,14 @@ import React from 'react';
 
 const VARIANTS = {
   primary: {
-    base: 'bg-primary text-white hover:bg-primary-dark',
-    shadow: '0px 4px 0px #B08010',
-    border: '#B08010',
+    base: 'bg-primary text-[#1C1733] hover:bg-primary-dark',
+    shadow: '0px 4px 0px #D4A800',
+    border: '#D4A800',
   },
   secondary: {
     base: 'bg-secondary text-white hover:bg-secondary-dark',
-    shadow: '0px 4px 0px #57534E',
-    border: '#57534E',
+    shadow: '0px 4px 0px #5448D0',
+    border: '#5448D0',
   },
   accent: {
     base: 'bg-accent text-white hover:bg-accent-dark',
@@ -22,14 +22,14 @@ const VARIANTS = {
     border: '#EA2B2B',
   },
   ghost: {
-    base: 'bg-white text-[#3C3C3C] border border-border hover:bg-gray-50',
-    shadow: '0px 4px 0px #C8B870',
-    border: '#C8B870',
+    base: 'bg-white/10 text-white border border-border hover:bg-white/20',
+    shadow: '0px 4px 0px #13102B',
+    border: '#13102B',
   },
   outline: {
-    base: 'bg-white text-primary border-2 border-primary hover:bg-primary-light',
-    shadow: '0px 4px 0px #B08010',
-    border: '#B08010',
+    base: 'bg-transparent text-primary border-2 border-primary hover:bg-primary/10',
+    shadow: '0px 4px 0px #D4A800',
+    border: '#D4A800',
   },
 };
 

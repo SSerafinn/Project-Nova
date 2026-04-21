@@ -14,6 +14,7 @@ app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.use('/api/folders', require('./routes/folders'));
 app.use('/api/notes', require('./routes/notes'));
 app.use('/api/upload', require('./routes/upload'));
 app.use('/api/generate', require('./routes/generate'));

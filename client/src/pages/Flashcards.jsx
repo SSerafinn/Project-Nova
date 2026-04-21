@@ -35,7 +35,6 @@ export default function Flashcards() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // Keyboard navigation
   useEffect(() => {
     function onKey(e) {
       if (e.key === 'ArrowRight') handleNext();
@@ -93,26 +92,39 @@ export default function Flashcards() {
       <div className="mb-6">
         <button
           onClick={() => navigate(`/notes/${id}/summary`)}
-          className="text-muted hover:text-[#3C3C3C] font-semibold text-sm flex items-center gap-1 mb-3"
+          className="text-muted hover:text-white font-semibold text-sm flex items-center gap-1 mb-3 transition-colors"
         >
           ← Back to Summary
         </button>
-        <h1 className="text-xl font-black text-[#3C3C3C] mb-1">{sessionTitle}</h1>
-        <p className="text-muted text-sm font-semibold">Flashcard Review — Press Space to flip, arrows to navigate</p>
+        <h1 className="text-xl font-black text-white mb-1">{sessionTitle}</h1>
+        <p className="text-muted text-sm font-semibold">Press Space to flip, arrows to navigate</p>
+      </div>
+
+      {/* Counter */}
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm font-bold text-muted">
+          {currentIndex + 1} / {cards.length}
+        </span>
+        <span className="text-sm font-bold text-primary">
+          {Math.round(((currentIndex + 1) / cards.length) * 100)}%
+        </span>
       </div>
 
       {/* Progress */}
       <div className="mb-6">
-        <ProgressBar current={currentIndex + 1} total={cards.length} />
+        <ProgressBar current={currentIndex + 1} total={cards.length} showLabel={false} />
       </div>
 
-      {/* Flashcard */}
+      {/* Flashcard with stacked deck */}
       <FlashCard
         term={card.term}
         definition={card.definition}
         isFlipped={isFlipped}
         onClick={() => setIsFlipped((f) => !f)}
       />
+
+      {/* Session title below card */}
+      <p className="text-center text-muted font-bold text-sm mt-4">{sessionTitle}</p>
 
       {/* Controls */}
       <div className="flex items-center justify-between mt-6 gap-3">
@@ -154,11 +166,6 @@ export default function Flashcards() {
           </Button>
         </div>
       )}
-
-      {/* Card counter */}
-      <p className="text-center text-muted font-bold text-sm mt-4">
-        Card {currentIndex + 1} of {cards.length}
-      </p>
     </div>
   );
 }

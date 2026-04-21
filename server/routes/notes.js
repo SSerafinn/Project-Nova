@@ -9,9 +9,11 @@ router.get('/', (req, res) => {
     const sessions = db.prepare(`
       SELECT
         s.id, s.title, s.source, s.created_at,
+        s.folder_id, fo.name AS folder_name,
         COUNT(DISTINCT f.id) AS flashcard_count,
         COUNT(DISTINCT q.id) AS quiz_count
       FROM sessions s
+      LEFT JOIN folders fo ON fo.id = s.folder_id
       LEFT JOIN flashcards f ON f.session_id = s.id
       LEFT JOIN quiz_items q ON q.session_id = s.id
       GROUP BY s.id
@@ -63,6 +65,23 @@ router.get('/:id', (req, res) => {
   }
 });
 
+// PATCH /api/notes/:id/folder — assign or remove folder
+router.patch('/:id/folder', (req, res) => {
+  try {
+    const { folder_id } = req.body;
+    const result = db.prepare(
+      'UPDATE sessions SET folder_id = ? WHERE id = ?'
+    ).run([folder_id ?? null, req.params.id]);
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Session not found.' });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error('PATCH /notes/:id/folder error:', err);
+    res.status(500).json({ error: 'Failed to update folder.' });
+  }
+});
+
 // DELETE /api/notes/:id
 router.delete('/:id', (req, res) => {
   try {
@@ -79,7 +98,7 @@ router.delete('/:id', (req, res) => {
 
 // POST /api/notes — save note and trigger full AI generation
 router.post('/', async (req, res) => {
-  const { title, text, source } = req.body;
+  const { title, text, source, folder_id } = req.body;
 
   if (!title || !title.trim()) {
     return res.status(400).json({ error: 'Title is required.' });
@@ -102,8 +121,8 @@ router.post('/', async (req, res) => {
     // Wrap all DB writes in a transaction for atomicity
     const sessionId = runTransaction(() => {
       const sessionResult = db.prepare(
-        'INSERT INTO sessions (title, source) VALUES (?, ?)'
-      ).run([title.trim(), source]);
+        'INSERT INTO sessions (title, source, folder_id) VALUES (?, ?, ?)'
+      ).run([title.trim(), source, folder_id || null]);
       const sid = Number(sessionResult.lastInsertRowid);
 
       db.prepare('INSERT INTO notes (session_id, raw_text) VALUES (?, ?)').run([sid, text]);

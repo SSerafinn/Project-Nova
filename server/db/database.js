@@ -26,6 +26,13 @@ db.exec('PRAGMA foreign_keys = ON');
 const schema = fs.readFileSync(SCHEMA_PATH, 'utf-8');
 db.exec(schema);
 
+// Migration: add folder_id to sessions if it doesn't exist yet
+try {
+  db.exec('ALTER TABLE sessions ADD COLUMN folder_id INTEGER REFERENCES folders(id) ON DELETE SET NULL');
+} catch {
+  // Column already exists — safe to ignore
+}
+
 /**
  * Synchronous transaction wrapper — equivalent to better-sqlite3's db.transaction(fn)().
  * Runs fn() inside BEGIN/COMMIT, rolls back and re-throws on any error.

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import QuizQuestion from '../components/QuizQuestion';
 import ProgressBar from '../components/ui/ProgressBar';
 import Button from '../components/ui/Button';
-import { getNoteById } from '../services/api';
+import { getFolderQuiz } from '../services/api';
 import { QuestionMarkCircleIcon, TrophyIcon, StarIcon } from '../components/Icons';
 
 function fisherYates(arr) {
@@ -37,9 +37,10 @@ function Stars({ count }) {
   );
 }
 
-export default function Quiz() {
+export default function FolderQuiz() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [folderName, setFolderName] = useState('');
   const [allQuestions, setAllQuestions] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -47,17 +48,16 @@ export default function Quiz() {
   const [quizComplete, setQuizComplete] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [sessionTitle, setSessionTitle] = useState('');
 
   useEffect(() => {
-    getNoteById(id)
+    getFolderQuiz(id)
       .then((res) => {
-        setSessionTitle(res.data.title);
-        const shuffled = fisherYates(res.data.quiz || []);
-        setAllQuestions(res.data.quiz || []);
+        setFolderName(res.data.folder.name);
+        const shuffled = fisherYates(res.data.questions);
+        setAllQuestions(res.data.questions);
         setQuestions(shuffled);
       })
-      .catch(() => setError('Failed to load quiz.'))
+      .catch(() => setError('Failed to load folder quiz.'))
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -84,7 +84,7 @@ export default function Quiz() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
         <QuestionMarkCircleIcon className="w-14 h-14 text-primary animate-bounce" />
-        <p className="text-muted font-semibold">Loading quiz...</p>
+        <p className="text-muted font-semibold">Loading folder quiz...</p>
       </div>
     );
   }
@@ -92,9 +92,11 @@ export default function Quiz() {
   if (error || questions.length === 0) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-10 text-center">
-        <p className="text-muted font-bold mb-4">{error || 'No quiz questions found for this note.'}</p>
-        <Button variant="ghost" onClick={() => navigate(`/notes/${id}/summary`)}>
-          Back to Summary
+        <p className="text-muted font-bold mb-4">
+          {error || 'No quiz questions found in this folder.'}
+        </p>
+        <Button variant="ghost" onClick={() => navigate(`/folders/${id}`)}>
+          Back to Folder
         </Button>
       </div>
     );
@@ -110,6 +112,7 @@ export default function Quiz() {
           <TrophyIcon className="w-20 h-20 mx-auto" />
         </div>
         <h1 className="text-3xl font-black text-white">Quiz Complete!</h1>
+        <p className="text-muted font-semibold">{folderName} — Folder Quiz</p>
         <Stars count={stars} />
 
         <div className="bg-surface rounded-3xl border border-border/50 shadow-card p-8 w-full">
@@ -119,7 +122,7 @@ export default function Quiz() {
           </p>
           <p className="mt-3 font-semibold text-white/80">
             {stars === 3
-              ? 'Excellent work! You really know this material!'
+              ? 'Excellent work! You really know this folder!'
               : stars === 2
               ? "Good job! A bit more practice and you'll nail it!"
               : stars === 1
@@ -135,10 +138,10 @@ export default function Quiz() {
           <Button
             variant="ghost"
             size="lg"
-            onClick={() => navigate(`/notes/${id}/summary`)}
+            onClick={() => navigate(`/folders/${id}`)}
             className="flex-1"
           >
-            Back to Notes
+            Back to Folder
           </Button>
         </div>
       </div>
@@ -151,19 +154,25 @@ export default function Quiz() {
     <div className="max-w-2xl mx-auto px-4 py-10">
       <div className="mb-6">
         <button
-          onClick={() => navigate(`/notes/${id}/summary`)}
+          onClick={() => navigate(`/folders/${id}`)}
           className="text-muted hover:text-white font-semibold text-sm flex items-center gap-1 mb-3 transition-colors"
         >
-          ← Back to Summary
+          ← Back to Folder
         </button>
-        <h1 className="text-xl font-black text-white mb-1">{sessionTitle}</h1>
+        <h1 className="text-xl font-black text-white mb-0.5">{folderName}</h1>
+        <p className="text-muted text-sm font-semibold">Folder Quiz — {questions.length} questions total</p>
       </div>
 
       <div className="mb-6">
         <ProgressBar current={currentIndex} total={questions.length} showLabel={false} />
-        <p className="text-right text-sm font-bold text-muted mt-1">
-          Question {currentIndex + 1} / {questions.length}
-        </p>
+        <div className="flex items-center justify-between mt-1">
+          <p className="text-xs text-muted font-semibold">
+            From: {question.session_title}
+          </p>
+          <p className="text-sm font-bold text-muted">
+            {currentIndex + 1} / {questions.length}
+          </p>
+        </div>
       </div>
 
       <div className="bg-surface rounded-2xl border border-border/50 shadow-card p-6">
