@@ -2,7 +2,9 @@ const { Database } = require('node-sqlite3-wasm');
 const path = require('path');
 const fs = require('fs');
 
-const DB_PATH = path.join(__dirname, 'notequest.db');
+// On Railway: set DB_PATH=/data/notequest.db and mount a persistent volume at /data
+// In local dev: defaults to server/db/notequest.db
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'notequest.db');
 const SCHEMA_PATH = path.join(__dirname, 'schema.sql');
 
 // node-sqlite3-wasm may leave an empty "<db>.lock" directory after a crash; it blocks reopening.

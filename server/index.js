@@ -9,11 +9,16 @@ require('./db/database');
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
+// In production (Railway), the frontend is served from the same origin,
+// so CORS is only needed in local dev. Keep it permissive for local dev.
+const allowedOrigins = process.env.CLIENT_URL
+  ? [process.env.CLIENT_URL, 'http://localhost:5173']
+  : '*';
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// API Routes
 app.use('/api/folders', require('./routes/folders'));
 app.use('/api/notes', require('./routes/notes'));
 app.use('/api/upload', require('./routes/upload'));
@@ -21,6 +26,14 @@ app.use('/api/generate', require('./routes/generate'));
 
 // Health check
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
+
+// Serve built React frontend in production
+const clientDist = path.join(__dirname, '../client/dist');
+app.use(express.static(clientDist));
+// React Router: all non-API routes return index.html
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(clientDist, 'index.html'));
+});
 
 // Central error handler
 app.use((err, _req, res, _next) => {
@@ -30,5 +43,5 @@ app.use((err, _req, res, _next) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`NoteQuest server running on http://localhost:${PORT}`);
+  console.log(`Nova server running on http://localhost:${PORT}`);
 });
