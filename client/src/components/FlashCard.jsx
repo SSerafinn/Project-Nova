@@ -1,4 +1,3 @@
-import React from 'react';
 
 function StarShape({ className }) {
   return (
@@ -17,7 +16,7 @@ export default function FlashCard({ term, definition, isFlipped, onClick }) {
 
       {/* Main 3D flip card */}
       <div
-        className="flashcard-container relative z-10 w-full h-64 md:h-72 cursor-pointer"
+        className="flashcard-container relative z-10 w-full h-64 md:h-72 cursor-pointer overflow-hidden rounded-2xl"
         onClick={onClick}
         role="button"
         tabIndex={0}
