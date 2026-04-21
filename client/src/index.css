@@ -137,6 +137,16 @@ body {
 /* ─── Solar System Orbit Animation ─────────────────────────────────────────── */
 .orbit-system-container {
   perspective: 1200px;
+  transform-origin: center;
+}
+@media (max-width: 1024px) {
+  .orbit-system-container { transform: scale(0.9); }
+}
+@media (max-width: 768px) {
+  .orbit-system-container { transform: scale(0.7); }
+}
+@media (max-width: 640px) {
+  .orbit-system-container { transform: scale(0.5); }
 }
 
 .orbit-system-inner {

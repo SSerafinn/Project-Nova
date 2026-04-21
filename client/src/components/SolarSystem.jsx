@@ -32,7 +32,7 @@ export default function SolarSystem({ folders, onCreateFolder }) {
   const validFolders = folders || [];
 
   return (
-    <div className="relative w-full flex items-center justify-center orbit-system-container" style={{ height: '560px' }}>
+    <div className="relative w-full flex items-center justify-center orbit-system-container h-[300px] sm:h-[400px] md:h-[480px] lg:h-[560px]">
       
       {/* 3D Inner Container providing the isometric tilt */}
       <div className={`orbit-system-inner ${hoveredFolder ? 'is-paused' : ''}`}>
