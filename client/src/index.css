@@ -28,6 +28,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
 html,
 body {
   margin: 0;
@@ -42,12 +46,12 @@ body {
    * Prime-ish background-sizes (397px, 251px, etc.) prevent a visible tiling grid.
    */
   background-image:
-    radial-gradient(ellipse 70% 55% at 15% 35%, rgba(107,92,240,0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 55% 45% at 85% 70%, rgba(30,80,220,0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 30% at 60% 8%,  rgba(224,123,48,0.04) 0%, transparent 70%),
-    radial-gradient(circle, rgba(255,255,255,0.80) 1px,   transparent 1px),
-    radial-gradient(circle, rgba(200,210,255,0.45) 1px,   transparent 1px),
-    radial-gradient(circle, rgba(255,255,255,0.22) 0.5px, transparent 0.5px);
+    radial-gradient(ellipse 70% 55% at 15% 35%, rgba(107, 92, 240, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 45% at 85% 70%, rgba(30, 80, 220, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 60% 8%, rgba(224, 123, 48, 0.04) 0%, transparent 70%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.80) 1px, transparent 1px),
+    radial-gradient(circle, rgba(200, 210, 255, 0.45) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.22) 0.5px, transparent 0.5px);
   background-size:
     100% 100%,
     100% 100%,
@@ -70,7 +74,7 @@ body {
   inset-x: 0;
   top: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.18) 50%, transparent 100%);
   border-radius: inherit;
   pointer-events: none;
 }
@@ -135,18 +139,31 @@ body {
 }
 
 /* ─── Solar System Orbit Animation ─────────────────────────────────────────── */
-.orbit-system-container {
+.orbit-system-scale-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 1000px;
+  height: 600px;
   perspective: 1200px;
   transform-origin: center;
 }
+
 @media (max-width: 1024px) {
-  .orbit-system-container { transform: scale(0.9); }
+  .orbit-system-scale-wrapper { transform: translate(-50%, -50%) scale(0.85); }
 }
 @media (max-width: 768px) {
-  .orbit-system-container { transform: scale(0.7); }
+  .orbit-system-scale-wrapper { transform: translate(-50%, -50%) scale(0.65); }
 }
 @media (max-width: 640px) {
-  .orbit-system-container { transform: scale(0.5); }
+  .orbit-system-scale-wrapper { transform: translate(-50%, -50%) scale(0.40); }
+}
+@media (max-width: 480px) {
+  .orbit-system-scale-wrapper { transform: translate(-50%, -50%) scale(0.35); }
+}
+@media (max-width: 380px) {
+  .orbit-system-scale-wrapper { transform: translate(-50%, -50%) scale(0.30); }
 }
 
 .orbit-system-inner {
@@ -202,33 +219,50 @@ body {
 }
 
 @keyframes orbit-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes orbit-counter-spin {
-  from { transform: translate(-50%, -50%) rotate(0deg) rotateX(-60deg); }
-  to   { transform: translate(-50%, -50%) rotate(-360deg) rotateX(-60deg); }
+  from {
+    transform: translate(-50%, -50%) rotate(0deg) rotateX(-60deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(-360deg) rotateX(-60deg);
+  }
 }
 
 @keyframes moon-orbit {
-  from { transform: rotate(0deg) translateX(38px) rotate(0deg); }
-  to   { transform: rotate(360deg) translateX(38px) rotate(-360deg); }
+  from {
+    transform: rotate(0deg) translateX(38px) rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg) translateX(38px) rotate(-360deg);
+  }
 }
 
 /* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 5px;
 }
+
 ::-webkit-scrollbar-track {
   background: #131027;
   border-radius: 999px;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #2E2A55;
   border-radius: 999px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #7B6CF5;
 }
-

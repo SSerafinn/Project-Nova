@@ -32,126 +32,130 @@ export default function SolarSystem({ folders, onCreateFolder }) {
   const validFolders = folders || [];
 
   return (
-    <div className="relative w-full flex items-center justify-center orbit-system-container h-[300px] sm:h-[400px] md:h-[480px] lg:h-[560px]">
-      
-      {/* 3D Inner Container providing the isometric tilt */}
-      <div className={`orbit-system-inner ${hoveredFolder ? 'is-paused' : ''}`}>
-        
-        {/* Orbital rings */}
-        {validFolders.map((_, i) => {
-          const { radius } = getPlanetConfig(i);
-          const isHovered = hoveredFolder === validFolders[i].id;
-          const isDimmed = hoveredFolder && !isHovered;
+    <div className="relative w-full flex items-center justify-center h-[280px] sm:h-[350px] md:h-[450px] lg:h-[560px] overflow-hidden">
 
-          return (
-            <div
-              key={`ring-${i}`}
-              className="absolute rounded-full pointer-events-none transition-all duration-500"
-              style={{
-                width: radius * 2,
-                height: radius * 2,
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                border: isHovered ? '2px solid rgba(255,255,255,0.4)' : '1px solid rgba(255,255,255,0.07)',
-                boxShadow: isHovered ? '0 0 20px rgba(233,185,73,0.3), inset 0 0 20px rgba(233,185,73,0.3)' : 'inset 0 0 0 1px rgba(255,255,255,0.03)',
-                opacity: isDimmed ? 0.2 : 1,
-              }}
-            />
-          );
-        })}
+      {/* Constant massive sandbox bounding box to prevent scaled children from clipping */}
+      <div className="orbit-system-scale-wrapper pointer-events-none">
 
-        {/* The Sun (Center star) */}
-        <div
-          className={`absolute z-20 w-24 h-24 rounded-full transition-all duration-500 ${hoveredFolder ? 'opacity-40 animate-none scale-95' : 'animate-novaPulse shadow-glow-primary'}`}
-          style={{
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%) rotateX(-60deg)', // Stand upright in the tilted plane
-            background: 'radial-gradient(circle at 35% 35%, #F5D27A 0%, #E9B949 45%, #C99A32 100%)',
-            boxShadow: 'inset -8px -8px 16px rgba(0,0,0,0.3), 0 0 40px rgba(233,185,73,0.5)', // Crescent shadow
-          }}
-        />
+        {/* 3D Inner Container providing the isometric tilt */}
+        <div className={`orbit-system-inner pointer-events-auto ${hoveredFolder ? 'is-paused' : ''}`}>
 
-        {/* Orbiting Planets */}
-        {validFolders.map((folder, i) => {
-          const { main, light, glow, radius, duration } = getPlanetConfig(i);
-          const startDelay = -((i * GOLDEN_ANGLE) / 360) * duration;
-          const noteCount = folder.note_count || 0;
-          
-          const isHovered = hoveredFolder === folder.id;
-          const isDimmed = hoveredFolder && !isHovered;
+          {/* Orbital rings */}
+          {validFolders.map((_, i) => {
+            const { radius } = getPlanetConfig(i);
+            const isHovered = hoveredFolder === validFolders[i].id;
+            const isDimmed = hoveredFolder && !isHovered;
 
-          return (
-            <div
-              key={folder.id}
-              className="orbit-container"
-              style={{
-                '--orbit-radius': `${radius}px`,
-                '--orbit-duration': `${duration}s`,
-                animationDelay: `${startDelay}s`,
-              }}
-            >
-              <button
-                className="orbit-planet group flex flex-col items-center gap-2"
-                onClick={() => navigate(`/folders/${folder.id}`)}
-                onMouseEnter={() => setHoveredFolder(folder.id)}
-                onMouseLeave={() => setHoveredFolder(null)}
+            return (
+              <div
+                key={`ring-${i}`}
+                className="absolute rounded-full pointer-events-none transition-all duration-500"
                 style={{
-                  opacity: isDimmed ? 0.3 : 1,
-                  filter: isDimmed ? 'grayscale(80%) blur(1px)' : 'none',
+                  width: radius * 2,
+                  height: radius * 2,
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  border: isHovered ? '2px solid rgba(255,255,255,0.4)' : '1px solid rgba(255,255,255,0.07)',
+                  boxShadow: isHovered ? '0 0 20px rgba(233,185,73,0.3), inset 0 0 20px rgba(233,185,73,0.3)' : 'inset 0 0 0 1px rgba(255,255,255,0.03)',
+                  opacity: isDimmed ? 0.2 : 1,
+                }}
+              />
+            );
+          })}
+
+          {/* The Sun (Center star) */}
+          <div
+            className={`absolute z-20 w-24 h-24 rounded-full transition-all duration-500 ${hoveredFolder ? 'opacity-40 animate-none scale-95' : 'animate-novaPulse shadow-glow-primary'}`}
+            style={{
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%) rotateX(-60deg)', // Stand upright in the tilted plane
+              background: 'radial-gradient(circle at 35% 35%, #F5D27A 0%, #E9B949 45%, #C99A32 100%)',
+              boxShadow: 'inset -8px -8px 16px rgba(0,0,0,0.3), 0 0 40px rgba(233,185,73,0.5)', // Crescent shadow
+            }}
+          />
+
+          {/* Orbiting Planets */}
+          {validFolders.map((folder, i) => {
+            const { main, light, glow, radius, duration } = getPlanetConfig(i);
+            const startDelay = -((i * GOLDEN_ANGLE) / 360) * duration;
+            const noteCount = folder.note_count || 0;
+
+            const isHovered = hoveredFolder === folder.id;
+            const isDimmed = hoveredFolder && !isHovered;
+
+            return (
+              <div
+                key={folder.id}
+                className="orbit-container"
+                style={{
+                  '--orbit-radius': `${radius}px`,
+                  '--orbit-duration': `${duration}s`,
                   animationDelay: `${startDelay}s`,
-                  transition: 'opacity 0.4s, filter 0.4s, transform 0.3s',
-                  zIndex: isHovered ? 50 : 20,
                 }}
               >
-                <div className="relative">
-                  {/* Planetary Sphere with 3D inset shadow */}
-                  <div
-                    className={`w-14 h-14 rounded-full transition-all duration-300 ${isHovered ? 'scale-125' : 'group-hover:scale-110'}`}
-                    style={{
-                      background: `radial-gradient(circle at 35% 30%, ${light} 0%, ${main} 60%, ${main}88 100%)`,
-                      boxShadow: `inset -6px -6px 12px rgba(0,0,0,0.4), 0 0 16px ${glow}`,
-                    }}
-                  />
-                  
-                  {/* Orbiting Moons (representing notes) */}
-                  {Array.from({ length: Math.min(noteCount, 5) }).map((_, m) => {
-                    const moonDelay = -(m * 360 / 5) * 4 / 360; 
-                    return (
-                      <div 
-                        key={m} 
-                        className="orbit-moon"
-                        style={{
-                          background: m === 4 && noteCount > 5 ? '#FFF' : light, // White indicator if maxed out display moons
-                          boxShadow: `0 0 8px ${light}`,
-                          animationDelay: `${moonDelay}s`,
-                          '--moon-duration': `${4 + m * 0.5}s`,
-                          zIndex: 10,
-                        }}
-                      />
-                    );
-                  })}
-                  
-                  {/* Glassmorphism Interactive Tooltip (pops up on hover) */}
-                  <div className={`absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-max p-4 rounded-2xl border border-border/70 bg-surface/90 backdrop-blur-md shadow-card transition-all duration-300 transform pointer-events-none ${isHovered ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-95'}`}>
-                    <p className="text-base font-black text-white">{folder.name}</p>
-                    <p className="text-sm text-secondary font-bold mt-0.5">{noteCount} note{noteCount !== 1 ? 's' : ''}</p>
-                    {isHovered && <p className="text-[10px] text-muted mt-2 uppercase tracking-widest font-black">Click to enter orbit</p>}
-                  </div>
-                </div>
-
-                {/* Always-on fallback label (disappears on interaction) */}
-                <span
-                  className={`text-xs font-semibold text-white whitespace-nowrap px-3 py-1 rounded-full transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-100'}`}
-                  style={{ background: 'rgba(12,11,28,0.70)', backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.05)' }}
+                <button
+                  className="orbit-planet group flex flex-col items-center gap-2"
+                  onClick={() => navigate(`/folders/${folder.id}`)}
+                  onMouseEnter={() => setHoveredFolder(folder.id)}
+                  onMouseLeave={() => setHoveredFolder(null)}
+                  style={{
+                    opacity: isDimmed ? 0.3 : 1,
+                    filter: isDimmed ? 'grayscale(80%) blur(1px)' : 'none',
+                    animationDelay: `${startDelay}s`,
+                    transition: 'opacity 0.4s, filter 0.4s, transform 0.3s',
+                    zIndex: isHovered ? 50 : 20,
+                  }}
                 >
-                  {folder.name}
-                </span>
-              </button>
-            </div>
-          );
-        })}
+                  <div className="relative">
+                    {/* Planetary Sphere with 3D inset shadow */}
+                    <div
+                      className={`w-14 h-14 rounded-full transition-all duration-300 ${isHovered ? 'scale-125' : 'group-hover:scale-110'}`}
+                      style={{
+                        background: `radial-gradient(circle at 35% 30%, ${light} 0%, ${main} 60%, ${main}88 100%)`,
+                        boxShadow: `inset -6px -6px 12px rgba(0,0,0,0.4), 0 0 16px ${glow}`,
+                      }}
+                    />
+
+                    {/* Orbiting Moons (representing notes) */}
+                    {Array.from({ length: Math.min(noteCount, 5) }).map((_, m) => {
+                      const moonDelay = -(m * 360 / 5) * 4 / 360;
+                      return (
+                        <div
+                          key={m}
+                          className="orbit-moon"
+                          style={{
+                            background: m === 4 && noteCount > 5 ? '#FFF' : light, // White indicator if maxed out display moons
+                            boxShadow: `0 0 8px ${light}`,
+                            animationDelay: `${moonDelay}s`,
+                            '--moon-duration': `${4 + m * 0.5}s`,
+                            zIndex: 10,
+                          }}
+                        />
+                      );
+                    })}
+
+                    {/* Glassmorphism Interactive Tooltip (pops up on hover) */}
+                    <div className={`absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-max p-4 rounded-2xl border border-border/70 bg-surface/90 backdrop-blur-md shadow-card transition-all duration-300 transform pointer-events-none ${isHovered ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-95'}`}>
+                      <p className="text-base font-black text-white">{folder.name}</p>
+                      <p className="text-sm text-secondary font-bold mt-0.5">{noteCount} note{noteCount !== 1 ? 's' : ''}</p>
+                      {isHovered && <p className="text-[10px] text-muted mt-2 uppercase tracking-widest font-black">Click to enter orbit</p>}
+                    </div>
+                  </div>
+
+                  {/* Always-on fallback label (disappears on interaction) */}
+                  <span
+                    className={`text-xs font-semibold text-white whitespace-nowrap px-3 py-1 rounded-full transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-100'}`}
+                    style={{ background: 'rgba(12,11,28,0.70)', backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.05)' }}
+                  >
+                    {folder.name}
+                  </span>
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Empty State */}
