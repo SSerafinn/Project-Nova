@@ -135,12 +135,31 @@ body {
 }
 
 /* ─── Solar System Orbit Animation ─────────────────────────────────────────── */
+.orbit-system-container {
+  perspective: 1200px;
+}
+
+.orbit-system-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(60deg);
+}
+
+/* Pause animation on hover */
+.orbit-system-inner.is-paused .orbit-container,
+.orbit-system-inner.is-paused .orbit-planet,
+.orbit-system-inner.is-paused .orbit-moon {
+  animation-play-state: paused;
+}
+
 .orbit-container {
   position: absolute;
   top: 50%;
   left: 50%;
   width: 0;
   height: 0;
+  transform-style: preserve-3d;
   animation: orbit-spin linear infinite;
   animation-duration: var(--orbit-duration, 20s);
 }
@@ -151,11 +170,25 @@ body {
   top: 0;
   animation: orbit-counter-spin linear infinite;
   animation-duration: var(--orbit-duration, 20s);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotateX(-60deg);
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
+  transform-style: preserve-3d;
+}
+
+.orbit-moon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  margin-left: -3px;
+  border-radius: 50%;
+  animation: moon-orbit linear infinite;
+  animation-duration: var(--moon-duration, 4s);
 }
 
 @keyframes orbit-spin {
@@ -164,8 +197,13 @@ body {
 }
 
 @keyframes orbit-counter-spin {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to   { transform: translate(-50%, -50%) rotate(-360deg); }
+  from { transform: translate(-50%, -50%) rotate(0deg) rotateX(-60deg); }
+  to   { transform: translate(-50%, -50%) rotate(-360deg) rotateX(-60deg); }
+}
+
+@keyframes moon-orbit {
+  from { transform: rotate(0deg) translateX(38px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(38px) rotate(-360deg); }
 }
 
 /* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
