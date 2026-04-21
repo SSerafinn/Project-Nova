@@ -8,6 +8,7 @@ import Flashcards from './pages/Flashcards';
 import Quiz from './pages/Quiz';
 import FolderView from './pages/FolderView';
 import FolderQuiz from './pages/FolderQuiz';
+import Profile from './pages/Profile';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/notes/:id/quiz" element={<Quiz />} />
           <Route path="/folders/:id" element={<FolderView />} />
           <Route path="/folders/:id/quiz" element={<FolderQuiz />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </main>
     </>

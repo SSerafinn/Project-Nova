@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 export default function Navbar() {
@@ -34,6 +33,20 @@ export default function Navbar() {
             }`}
           >
             + Upload
+          </Link>
+
+          {/* Profile avatar */}
+          <Link
+            to="/profile"
+            className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-sm transition-all no-underline ml-1 ${
+              isActive('/profile')
+                ? 'ring-2 ring-primary ring-offset-2 ring-offset-bg'
+                : 'hover:ring-2 hover:ring-white/30 hover:ring-offset-1 hover:ring-offset-bg'
+            }`}
+            style={{ background: 'linear-gradient(135deg, #F5C518 0%, #C86A14 100%)' }}
+            title="Profile"
+          >
+            <span className="text-[#1C1733]">AR</span>
           </Link>
         </div>
       </div>
