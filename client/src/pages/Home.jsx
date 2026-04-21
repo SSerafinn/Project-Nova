@@ -53,7 +53,7 @@ export default function Home() {
   const [folders, setFolders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [view, setView] = useState('solar'); 
+  const [view, setView] = useState('solar');
   const [showFolderInput, setShowFolderInput] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
   const [creatingFolder, setCreatingFolder] = useState(false);
@@ -98,7 +98,7 @@ export default function Home() {
     getFolders().then((res) => {
       // If we are in demo mode, preserve the mock folders while updating
       setFolders(demoMode ? [...res.data, ...MOCK_FOLDERS] : res.data);
-    }).catch(() => {});
+    }).catch(() => { });
   }
 
   async function handleCreateFolder(e) {
@@ -119,7 +119,7 @@ export default function Home() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      
+
       {/* Gamification Dashboard Header - Mock for Demo */}
       <div className="bg-surface/80 backdrop-blur-md rounded-3xl border border-border/50 shadow-card p-6 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 animate-fadeInUp">
         <div className="flex items-center gap-4 w-full md:w-auto">
@@ -128,14 +128,14 @@ export default function Home() {
           </div>
           <div className="flex-1">
             <h2 className="text-xl font-black text-white flex gap-2 items-center flex-wrap">
-              Paula the Paulinian 
+              Paula the Paulinian
               <span className="bg-primary/20 text-primary text-[10px] uppercase font-black tracking-wider px-2.5 py-1 rounded-full border border-primary/30 flex items-center gap-1 shadow-[0_0_8px_rgba(233,185,73,0.3)]">
                 <SparklesIcon className="w-3 h-3" /> Lvl 12 Space Scholar
               </span>
             </h2>
             <div className="flex items-center justify-between mt-1 mb-1">
-               <p className="text-xs text-muted font-bold">1,450 XP</p>
-               <p className="text-xs text-muted font-bold">2,000 XP</p>
+              <p className="text-xs text-muted font-bold">1,450 XP</p>
+              <p className="text-xs text-muted font-bold">2,000 XP</p>
             </div>
             <div className="w-full max-w-sm bg-bg h-2 rounded-full border border-border/40 overflow-hidden">
               <div className="h-full bg-gradient-to-r from-primary to-accent rounded-full w-[72%] shadow-[0_0_10px_rgba(233,185,73,0.8)] relative">
@@ -144,16 +144,16 @@ export default function Home() {
             </div>
           </div>
         </div>
-        
+
         <div className="flex gap-3 self-end md:self-center shrink-0">
-           <div className="flex flex-col items-center justify-center bg-white/5 rounded-2xl p-2.5 px-4 min-w-[80px] border border-border/30 hover:bg-white/10 transition-colors shadow-inner cursor-default">
-              <span className="text-2xl font-black text-danger drop-shadow-[0_0_8px_rgba(255,75,75,0.6)]">14🔥</span>
-              <span className="text-[9px] uppercase font-bold text-muted tracking-wide mt-0.5">Day Streak</span>
-           </div>
-           <div className="flex flex-col items-center justify-center bg-white/5 rounded-2xl p-2.5 px-4 min-w-[80px] border border-border/30 hover:bg-white/10 transition-colors shadow-inner cursor-default">
-              <span className="text-2xl font-black text-secondary drop-shadow-[0_0_8px_rgba(123,108,245,0.6)]">{sessions.length > 0 ? (sessions.reduce((acc,s)=>acc+(s.flashcard_count||0),0) + 120) : '0'}</span>
-              <span className="text-[9px] uppercase font-bold text-muted tracking-wide mt-0.5">Cards Mastered</span>
-           </div>
+          <div className="flex flex-col items-center justify-center bg-white/5 rounded-2xl p-2.5 px-4 min-w-[80px] border border-border/30 hover:bg-white/10 transition-colors shadow-inner cursor-default">
+            <span className="text-2xl font-black text-danger drop-shadow-[0_0_8px_rgba(255,75,75,0.6)]">14🔥</span>
+            <span className="text-[9px] uppercase font-bold text-muted tracking-wide mt-0.5">Day Streak</span>
+          </div>
+          <div className="flex flex-col items-center justify-center bg-white/5 rounded-2xl p-2.5 px-4 min-w-[80px] border border-border/30 hover:bg-white/10 transition-colors shadow-inner cursor-default">
+            <span className="text-2xl font-black text-secondary drop-shadow-[0_0_8px_rgba(123,108,245,0.6)]">{sessions.length > 0 ? (sessions.reduce((acc, s) => acc + (s.flashcard_count || 0), 0) + 120) : '0'}</span>
+            <span className="text-[9px] uppercase font-bold text-muted tracking-wide mt-0.5">Cards Mastered</span>
+          </div>
         </div>
       </div>
 
@@ -169,29 +169,27 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-3">
-          
+
           {/* Demo Toggle Button for Hackathon */}
-           <button
+          <button
             onClick={handleDemoToggle}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black transition-all border shadow-card active:translate-y-1 active:shadow-none ${
-              demoMode
-                ? 'bg-primary/20 border-primary/50 text-primary shadow-glow-primary'
-                : 'bg-surface border-border/50 text-muted hover:text-white'
-            }`}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black transition-all border shadow-card active:translate-y-1 active:shadow-none ${demoMode
+              ? 'bg-primary/20 border-primary/50 text-primary shadow-glow-primary'
+              : 'bg-surface border-border/50 text-muted hover:text-white'
+              }`}
             title="Toggle Demo Mock Data"
           >
-            🎮 {demoMode ? 'Demo Active' : 'Load Demo'}
+            {demoMode ? 'Demo Active' : 'Load Demo'}
           </button>
 
           {/* View toggle */}
           <div className="flex items-center bg-white/5 border border-border/30 rounded-xl p-1 gap-1 shadow-inner">
             <button
               onClick={() => setView('solar')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                view === 'solar'
-                  ? 'bg-surface border border-border/40 text-white shadow-sm'
-                  : 'text-muted hover:text-white'
-              }`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${view === 'solar'
+                ? 'bg-surface border border-border/40 text-white shadow-sm'
+                : 'text-muted hover:text-white'
+                }`}
               title="Solar view"
             >
               <OrbitIcon className="w-4 h-4" />
@@ -199,11 +197,10 @@ export default function Home() {
             </button>
             <button
               onClick={() => setView('grid')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                view === 'grid'
-                  ? 'bg-surface border border-border/40 text-white shadow-sm'
-                  : 'text-muted hover:text-white'
-              }`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${view === 'grid'
+                ? 'bg-surface border border-border/40 text-white shadow-sm'
+                : 'text-muted hover:text-white'
+                }`}
               title="Grid view"
             >
               <GridIcon className="w-4 h-4" />
@@ -270,7 +267,7 @@ export default function Home() {
           {sessions.length > 0 && (
             <div className="mt-12">
               <h2 className="text-xl font-black text-white mb-6 flex items-center gap-2">
-                 <BookOpenIcon className="w-5 h-5 text-primary" /> Active Notes
+                <BookOpenIcon className="w-5 h-5 text-primary" /> Active Notes
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {sessions.map((session, i) => (
@@ -310,8 +307,8 @@ export default function Home() {
                     >
                     </div>
                     <div className="w-full text-center space-y-0.5">
-                       <p className="font-bold text-white text-sm line-clamp-1 truncate">{folder.name}</p>
-                       <p className="text-[10px] uppercase tracking-wider text-muted font-bold">{folder.note_count ?? 0} note{folder.note_count !== 1 ? 's' : ''}</p>
+                      <p className="font-bold text-white text-sm line-clamp-1 truncate">{folder.name}</p>
+                      <p className="text-[10px] uppercase tracking-wider text-muted font-bold">{folder.note_count ?? 0} note{folder.note_count !== 1 ? 's' : ''}</p>
                     </div>
                   </button>
                 ))}
@@ -366,7 +363,8 @@ export default function Home() {
       </button>
 
       {/* Shimmer CSS for XP bar */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes shimmer {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(200%); }

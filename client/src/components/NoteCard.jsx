@@ -96,11 +96,8 @@ export default function NoteCard({ session, onDelete, onFolderChange, folders = 
 
   return (
     <Card className="flex flex-col animate-fadeInUp" style={style}>
-      {/* Gradient accent stripe at top */}
-      <div
-        className="h-0.5 w-full flex-shrink-0"
-        style={{ background: 'linear-gradient(90deg, #E9B949 0%, #7B6CF5 50%, #E07B30 100%)' }}
-      />
+      {/* Solid accent stripe at top */}
+      <div className="h-0.5 w-full flex-shrink-0 bg-primary" />
 
       <div className="p-5 flex flex-col gap-4">
         {/* Header */}
