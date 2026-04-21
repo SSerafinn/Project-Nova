@@ -18,21 +18,23 @@ async function generateSummary(text) {
     throw new Error('Notes are too short to generate a summary. Please provide more content.');
   }
 
-  const prompt = `You are a study assistant. Given the following student notes, generate a structured reviewer summary as JSON.
+  const prompt = `You are a study assistant. Given the following student notes, generate a comprehensive, cohesive study guide as JSON. It should read like actual summarized prose notes that a student would write, organized by logical sections, rather than isolated bullet points.
 
 Return a JSON object with this exact shape:
 {
-  "keyConcepts": ["string", ...],
-  "importantTerms": [
-    { "term": "string", "definition": "string" }
-  ],
-  "keyTakeaways": ["string", ...]
+  "overview": "string (a short, overarching summary of the entire notes)",
+  "sections": [
+    {
+      "heading": "string (logical section title)",
+      "content": "string (detailed, cohesive paragraphs summarizing this section of the notes. Use complete sentences.)"
+    }
+  ]
 }
 
 Rules:
-- keyConcepts: 5 to 8 key concepts as short phrases
-- importantTerms: 5 to 10 vocabulary terms with definitions
-- keyTakeaways: 3 to 5 bullet point takeaways
+- Write in a clear, concise, prose style. Do not use isolated bullet points.
+- Create 3 to 6 logical sections based on the notes.
+- Ensure the content reads cohesively like a study guide.
 
 Notes:
 ${text}`;

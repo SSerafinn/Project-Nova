@@ -10,7 +10,21 @@ function formatDate(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
-function estimateReadTime(terms = [], takeaways = []) {
+function estimateReadTime(summaryData) {
+  if (!summaryData) return 1;
+  let text = '';
+  if (summaryData.sections) {
+    text += (summaryData.overview || '') + ' ';
+    summaryData.sections.forEach((s) => {
+      text += (s.heading || '') + ' ' + (s.content || '') + ' ';
+    });
+    const words = text.split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.ceil(words / 200));
+  }
+  
+  // Backward compatibility with legacy summary format
+  const terms = summaryData.importantTerms || [];
+  const takeaways = summaryData.keyTakeaways || [];
   const words = (terms.length * 20) + (takeaways.length * 15);
   return Math.max(1, Math.ceil(words / 200));
 }
@@ -69,10 +83,18 @@ export default function Summary() {
   }
 
   const summary = session.summary?.content;
+  const isUpgradedFormat = !!summary?.sections;
+
+  // New format props
+  const overview = summary?.overview;
+  const sections = summary?.sections || [];
+
+  // Old format props (for backward compatibility if existing notes are loaded)
   const keyConcepts = summary?.keyConcepts || [];
   const importantTerms = summary?.importantTerms || [];
   const keyTakeaways = summary?.keyTakeaways || [];
-  const readTime = estimateReadTime(importantTerms, keyTakeaways);
+
+  const readTime = estimateReadTime(summary);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
@@ -87,15 +109,15 @@ export default function Summary() {
 
       {/* ── Book Cover ─────────────────────────────────────────────── */}
       <div
-        className="relative rounded-3xl overflow-hidden mb-8 p-8"
+        className="relative rounded-3xl overflow-hidden mb-8 p-8 border border-white/10"
         style={{
-          background: 'linear-gradient(135deg, #251E42 0%, #1C1733 60%, #2D2560 100%)',
-          border: '1px solid rgba(107,92,240,0.3)',
-          boxShadow: '0px 6px 0px #13102B',
+          background: 'linear-gradient(135deg, rgba(37,30,66,0.5) 0%, rgba(28,23,51,0.5) 100%)',
+          backdropFilter: 'blur(16px)',
+          boxShadow: '0px 6px 0px rgba(12,11,28,0.8)',
         }}
       >
         {/* Decorative spine line */}
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-3xl bg-gradient-to-b from-primary via-secondary to-accent" />
+        <div className="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-3xl bg-gradient-to-b from-[#E9B949] via-[#7B6CF5] to-[#E07B30]" />
 
         {/* Top row */}
         <div className="flex items-start justify-between gap-4 pl-4">
@@ -128,18 +150,28 @@ export default function Summary() {
           <div className="mt-6 pl-4">
             <p className="text-xs font-black text-muted/60 tracking-widest uppercase mb-2">Contents</p>
             <div className="flex flex-col gap-1">
-              {[
-                { num: '01', label: 'Key Concepts', count: keyConcepts.length },
-                { num: '02', label: 'Important Terms', count: importantTerms.length },
-                { num: '03', label: 'Key Takeaways', count: keyTakeaways.length },
-              ].map(({ num, label, count }) => (
-                <div key={num} className="flex items-center gap-3 text-sm">
-                  <span className="font-black text-primary/60 text-xs w-6">{num}</span>
-                  <span className="flex-1 border-b border-dashed border-white/10" />
-                  <span className="font-bold text-white/70">{label}</span>
-                  <span className="text-xs text-muted font-semibold w-8 text-right">{count}</span>
-                </div>
-              ))}
+              {isUpgradedFormat ? (
+                sections.map((sec, i) => (
+                  <div key={i} className="flex items-center gap-3 text-sm">
+                    <span className="font-black text-primary/60 text-xs w-6">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="flex-1 border-b border-dashed border-white/10" />
+                    <span className="font-bold text-white/70 truncate">{sec.heading}</span>
+                  </div>
+                ))
+              ) : (
+                [
+                  { num: '01', label: 'Key Concepts', count: keyConcepts.length },
+                  { num: '02', label: 'Important Terms', count: importantTerms.length },
+                  { num: '03', label: 'Key Takeaways', count: keyTakeaways.length },
+                ].map(({ num, label, count }) => (
+                  <div key={num} className="flex items-center gap-3 text-sm">
+                    <span className="font-black text-primary/60 text-xs w-6">{num}</span>
+                    <span className="flex-1 border-b border-dashed border-white/10" />
+                    <span className="font-bold text-white/70">{label}</span>
+                    <span className="text-xs text-muted font-semibold w-8 text-right">{count}</span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         )}
@@ -151,9 +183,40 @@ export default function Summary() {
           <p className="text-muted font-semibold">No summary yet.</p>
           <button onClick={handleRegenerate} className="mt-4 text-primary font-bold text-sm underline">Generate one now</button>
         </div>
+      ) : isUpgradedFormat ? (
+        <div className="flex flex-col gap-6">
+          {/* Overview */}
+          {overview && (
+            <div className="relative overflow-hidden border border-white/10 rounded-3xl p-6" style={{ background: 'rgba(255,255,255,0.02)', backdropFilter: 'blur(10px)', boxShadow: '0px 4px 0px rgba(12,11,28,0.5)' }}>
+              <div className="flex items-center gap-2 mb-3">
+                <BookOpenIcon className="w-4 h-4 text-[#E9B949]" />
+                <h2 className="font-black text-[#E9B949] text-sm uppercase tracking-widest">Overview</h2>
+              </div>
+              <p className="text-white/85 leading-relaxed text-sm md:text-base">{overview}</p>
+            </div>
+          )}
+
+          {/* Sections */}
+          {sections.length > 0 && (
+            <div className="border border-white/10 rounded-3xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.02)', backdropFilter: 'blur(10px)', boxShadow: '0px 4px 0px rgba(12,11,28,0.5)' }}>
+              {sections.map((sec, i) => (
+                <div key={i} className="border-b border-white/5 last:border-0 relative">
+                  <div className="flex items-center gap-3 px-6 py-4 border-b border-white/5 bg-white/[0.01]">
+                    <span className="text-xs font-black text-secondary tracking-widest">{String(i + 1).padStart(2, '0')}</span>
+                    <div className="w-px h-4 bg-white/10" />
+                    <h2 className="font-bold text-white text-base md:text-lg">{sec.heading}</h2>
+                  </div>
+                  <div className="px-6 py-5">
+                    <p className="text-white/80 leading-relaxed text-sm md:text-base whitespace-pre-wrap">{sec.content}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       ) : (
         <div className="flex flex-col gap-6">
-
+          {/* Legacy Summary Format */}
           {/* ── Section 01: Key Concepts ───────────────────────────── */}
           <div className="bg-surface border border-border/50 rounded-3xl overflow-hidden" style={{ boxShadow: '0px 4px 0px #13102B' }}>
             <div className="flex items-center gap-3 px-6 py-4 border-b border-border/30">
@@ -167,10 +230,7 @@ export default function Summary() {
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {keyConcepts.map((concept, i) => (
-                    <span
-                      key={i}
-                      className="px-3.5 py-1.5 rounded-xl text-sm font-bold bg-primary/15 text-primary border border-primary/20"
-                    >
+                    <span key={i} className="px-3.5 py-1.5 rounded-xl text-sm font-bold bg-primary/15 text-primary border border-primary/20">
                       {concept}
                     </span>
                   ))}
@@ -232,17 +292,16 @@ export default function Summary() {
               )}
             </div>
           </div>
-
         </div>
       )}
 
       {/* ── CTA ────────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row gap-3 mt-8">
-        <Button variant="secondary" size="lg" onClick={() => navigate(`/notes/${id}/flashcards`)} className="flex-1 flex items-center justify-center gap-2">
+        <Button variant="secondary" size="lg" onClick={() => navigate(`/notes/${id}/flashcards`)} className="flex-1 flex items-center justify-center gap-2" style={{ border: '1px solid rgba(123,108,245,0.3)' }}>
           <LayersIcon className="w-4 h-4" />
           Study Flashcards
         </Button>
-        <Button variant="primary" size="lg" onClick={() => navigate(`/notes/${id}/quiz`)} className="flex-1 flex items-center justify-center gap-2">
+        <Button variant="primary" size="lg" onClick={() => navigate(`/notes/${id}/quiz`)} className="flex-1 flex items-center justify-center gap-2" style={{ border: '1px solid rgba(233,185,73,0.3)' }}>
           <QuestionMarkCircleIcon className="w-4 h-4" />
           Take Quiz
         </Button>
