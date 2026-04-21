@@ -15,7 +15,7 @@ export default function App() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-bg pt-16">
+      <main className="min-h-screen pt-16">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />

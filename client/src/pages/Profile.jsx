@@ -68,12 +68,8 @@ export default function Profile() {
       <div className="relative rounded-3xl overflow-hidden bg-surface border border-border/50 shadow-card animate-fadeInUp" style={{ animationDelay: '0.1s' }}>
         {/* Cover Photo Area */}
         <div className="h-32 sm:h-48 w-full relative overflow-hidden shimmer-top">
-          <div className="absolute inset-0 bg-gradient-to-r from-secondary-dark via-surface to-accent-dark opacity-40"></div>
-          {/* Abstract blobs for visual wow */}
-          <div className="absolute -top-24 -left-24 w-64 h-64 bg-secondary/30 rounded-full blur-[80px]"></div>
-          <div className="absolute -bottom-24 -right-12 w-64 h-64 bg-primary/20 rounded-full blur-[80px]"></div>
-          {/* subtle starry overlay */}
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+          {/* Clean overlay background */}
+          <div className="absolute inset-0 bg-surface/50"></div>
         </div>
 
         {/* Profile Info */}

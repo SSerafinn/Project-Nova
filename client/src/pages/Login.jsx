@@ -24,14 +24,8 @@ export default function Login() {
         
         {/* Left Side: Branding and Hero Graphic */}
         <div className="md:w-1/2 p-10 md:p-14 relative overflow-hidden flex flex-col justify-between shimmer-top">
-          {/* Subtle gradient wash */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-bg to-secondary/10 z-0"></div>
-          
-          {/* Decorative Floating Orbs */}
-          <div className="absolute -top-12 -left-12 w-64 h-64 bg-primary/20 rounded-full blur-[80px]"></div>
-          <div className="absolute -bottom-16 -right-16 w-80 h-80 bg-secondary/20 rounded-full blur-[80px]"></div>
-          {/* Subtle starry background */}
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+          {/* Clean dark overlay to mute the background while letting stars show through */}
+          <div className="absolute inset-0 bg-surface/40 z-0"></div>
 
           <div className="relative z-10 flex-1 flex flex-col">
             <div className="flex items-center gap-2 mb-12">
