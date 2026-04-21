@@ -2,12 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { TrophyIcon, StarIcon, FireIcon, BookOpenIcon, LayersIcon, QuestionMarkCircleIcon, AcademicCapIcon, SparklesIcon } from '../components/Icons';
 
 const MOCK_USER = {
-  name: 'Alex Rivera',
-  email: 'alex.rivera@university.edu',
-  school: 'State University',
+  name: 'Paula the Paulinian',
+  email: 'paula@spup.edu.ph',
+  school: 'St. Paul University',
   major: 'Computer Science',
   joined: 'September 2024',
-  avatar: 'AR',
+  avatar: 'PP',
 };
 
 const MOCK_STATS = [

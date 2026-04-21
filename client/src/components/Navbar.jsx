@@ -72,7 +72,7 @@ export default function Navbar() {
             style={{ background: 'linear-gradient(135deg, #E9B949 0%, #E07B30 100%)' }}
             title="Profile"
           >
-            <span className="text-[#0C0B1C] font-bold text-xs">AR</span>
+            <span className="text-[#0C0B1C] font-bold text-xs">PP</span>
           </Link>
         </div>
       </div>
