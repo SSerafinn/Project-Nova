@@ -251,7 +251,7 @@ export default function Home() {
       {/* Loading */}
       {loading && (
         <div className="flex flex-col items-center justify-center py-24 gap-4">
-          <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+          <img src="/nova_logo_no_text.png" alt="Loading..." className="w-16 h-16 object-contain animate-bounce drop-shadow-[0_0_15px_rgba(233,185,73,0.4)]" />
           <p className="text-primary font-black uppercase tracking-widest text-xs animate-pulse">Initializing Orbit...</p>
         </div>
       )}

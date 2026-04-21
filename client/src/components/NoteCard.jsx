@@ -121,7 +121,7 @@ export default function NoteCard({ session, onDelete, onFolderChange, folders = 
             title="Delete note"
           >
             {deleting ? (
-              <SpinnerIcon className="h-4 w-4 animate-spin" />
+              <img src="/nova_logo_no_text.png" alt="Deleting" className="w-4 h-4 object-contain animate-bounce opacity-70 drop-shadow-[0_0_5px_rgba(255,75,75,0.4)]" />
             ) : (
               <TrashIcon className="h-4 w-4" />
             )}
@@ -154,7 +154,7 @@ export default function NoteCard({ session, onDelete, onFolderChange, folders = 
             title="Assign to folder"
           >
             {movingFolder ? (
-              <SpinnerIcon className="w-3.5 h-3.5 animate-spin" />
+              <img src="/nova_logo_no_text.png" alt="Moving" className="w-4 h-4 object-contain animate-bounce opacity-70" />
             ) : (
               <FolderIcon className="w-3.5 h-3.5" />
             )}

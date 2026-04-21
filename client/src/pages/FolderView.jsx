@@ -53,7 +53,7 @@ export default function FolderView() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-        <SpinnerIcon className="w-10 h-10 text-primary animate-spin" />
+        <img src="/nova_logo_no_text.png" alt="Loading..." className="w-12 h-12 object-contain animate-bounce drop-shadow-[0_0_15px_rgba(233,185,73,0.4)]" />
         <p className="text-muted font-semibold">Loading folder...</p>
       </div>
     );

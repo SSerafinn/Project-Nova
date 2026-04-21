@@ -138,7 +138,7 @@ export default function Summary() {
             className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-muted hover:text-white font-bold text-xs transition-colors border border-white/10"
           >
             {regenerating
-              ? <SpinnerIcon className="w-3.5 h-3.5 animate-spin" />
+              ? <img src="/nova_logo_no_text.png" alt="Working..." className="w-4 h-4 object-contain animate-bounce drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
               : <ArrowPathIcon className="w-3.5 h-3.5" />
             }
             Regenerate

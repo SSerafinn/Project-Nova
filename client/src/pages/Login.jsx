@@ -95,7 +95,7 @@ export default function Login() {
                 className="w-full btn-chunky py-3.5 mt-2 bg-primary text-[#1C1733] font-black text-sm rounded-xl shadow-card-primary hover:shadow-glow-primary transition-all disabled:opacity-70 flex justify-center items-center gap-2 group border border-transparent"
               >
                 {isLoading ? (
-                  <div className="w-5 h-5 border-2 border-[#1C1733]/30 border-t-[#1C1733] rounded-full animate-spin"></div>
+                  <img src="/nova_logo_no_text.png" alt="Loading..." className="w-5 h-5 object-contain animate-bounce brightness-0 opacity-70" />
                 ) : (
                   <>
                     Sign In <SparklesIcon className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all" />
